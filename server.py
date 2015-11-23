@@ -31,6 +31,9 @@ def message_system(name):
     action = urljoin(MY_ADDRESS, '/gather_action') + '?name={}'.format(name)
 
     res = Response()
+
+    res.say('Hello, {}'.format(name))
+
     with res.gather(numDigits='12', action=action) as g:
         g.say(
             'Please enter your twelve digit recharge pin, '
@@ -44,8 +47,6 @@ def message_system(name):
 def gather_action():
     digits = flask.request.form.get('Digits', '')
     logging.info('Digits: %s', digits)
-
-    name = flask.request.args.get('name', 'Unknown caller')
 
     res = Response()
     res.say("You entered {}".format(' '.join(digits)))
