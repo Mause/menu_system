@@ -35,12 +35,11 @@ def message_system(number):
             'Goodbye'
         )
     else:
-        name = CALLERS[number]
-        res.say('Hello, {}'.format(name))
+        res.say('Hello, {}'.format(CALLERS[number]['name']))
 
     action = (
         urljoin(MY_ADDRESS, '/gather_action') + '?' +
-        urlencode({'name': name})
+        urlencode({'number': number})
     )
 
     with res.gather(numDigits='12', action=action) as g:
@@ -56,10 +55,12 @@ def gather_action():
     digits = flask.request.form.get('Digits', '')
     logging.info('Digits: %s', digits)
 
+    caller = CALLERS[flask.request.args['number']]
+
     res = Response()
     res.say("You entered {}".format(' '.join(digits)))
-    if CALLERS[flask.request.args['name']] != digits:
-        res.say('That password is incorrect')
+    if caller['passcode'] != digits:
+        res.say('That passcode is incorrect')
     else:
         res.say("Please wait while your message is retrieved")
         res.pause(length="3")
