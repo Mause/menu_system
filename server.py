@@ -137,7 +137,7 @@ def send_call():
         return 'Call sent'
 
     if 'delay' in flask.request.args:
-        delay = int(flask.request.args)
+        delay = int(flask.request.args['delay'])
 
         Thread(target=lambda: time.sleep(delay) and internal()).start()
 
