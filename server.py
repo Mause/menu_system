@@ -68,7 +68,8 @@ def gather_action():
         res.pause(length="3")
         res.say("Message follows.")
         res.pause(length="0.5")
-        res.play(caller['url'])
+        for url in caller['url']:
+            res.play(url)
         res.pause(length="0.5")
         res.say("End of message.")
     res.pause(length="1")
@@ -97,10 +98,35 @@ CALLERS = {
         'passcode': '20133',
         'url': (
             "http://i1.theportalwiki.net/img/d/dc/"
-            "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav"
+            "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav",
+        )
+    },
+    "+61428856419": {
+        'name': 'Ailish',
+        'passcode': '666',
+        'url': ('http://i1.theportalwiki.net/img/7/7f/Wheatley_sp_a2_bts2_trapped06.wav',)
+    },
+    "+61437727157": {
+        'name': 'Michelle',
+        'passcode': '0000',
+        'url': (
+            'http://i1.theportalwiki.net/img/7/7d/'
+            'Cave_Johnson_dlc2_0775_altcave_cat_johnson01.wav',
+        )
+    },
+    "+61487321206": {
+        'name': 'Jesse',
+        'passcode': '529626',
+        'url': (
+            'http://i1.theportalwiki.net/img/b/b4/'
+            'Cave_Johnson_fifties_intro01.wav',
         )
     }
 }
+
+for caller in CALLERS.values():
+    assert set(caller) == {'name', 'passcode', 'url'}
+    assert isinstance(caller['url'], (list, tuple))
 
 
 @app.route('/request', methods=['POST'])
