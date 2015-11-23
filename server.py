@@ -2,7 +2,7 @@ import os
 import logging
 from twilio.rest import TwilioRestClient
 from urllib.parse import urlencode
-from twilio.twiml import Response
+from twilio.twiml import Response as TwimlResponse
 from urllib.parse import urljoin
 
 import flask
@@ -52,9 +52,10 @@ for caller in CALLERS.values():
     assert isinstance(caller['url'], (list, tuple))
 
 
-class CustomResponse(Response):
+class Response(TwimlResponse):
     def say(self, text, **kwargs):
         kwargs['language'] = 'en-AU'
+        return super().say(text, **kwargs)
 
 
 def make_res(res):
@@ -67,7 +68,7 @@ def call():
 
 
 def message_system(number):
-    res = CustomResponse()
+    res = Response()
     if number not in CALLERS:
         res.say(
             'Hello, unknown caller. '
@@ -98,7 +99,7 @@ def gather_action():
 
     caller = CALLERS[flask.request.args['number']]
 
-    res = CustomResponse()
+    res = Response()
     if caller['passcode'] != digits:
         res.say('That passcode is incorrect')
     else:
