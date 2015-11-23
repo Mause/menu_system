@@ -59,13 +59,15 @@ def gather_action():
     caller = CALLERS[flask.request.args['number']]
 
     res = Response()
-    res.say("You entered {}".format(' '.join(digits)))
     if caller['passcode'] != digits:
         res.say('That passcode is incorrect')
     else:
-        res.say("Please wait while your message is retrieved")
+        res.say(
+            "Passcode correct. Please wait while your message is retrieved"
+        )
         res.pause(length="3")
-        res.say("Message follows")
+        res.say("Message follows.")
+        res.pause(length="0.5")
         res.play(
             "http://i1.theportalwiki.net/img/d/dc/"
             "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav"
