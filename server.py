@@ -32,7 +32,7 @@ def message_system(number):
         res.say(
             'Hello, unknown caller. '
             'You are not authorized to access this service. '
-            'Goodbye'
+            'Fuck the hell off'
         )
 
     else:
