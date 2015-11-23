@@ -126,28 +126,20 @@ def gather_action():
 
 @app.route('/send_call')
 def send_call():
-    def internal():
-        logging.info('sending call')
-        client.calls.create(
-            to='+61416041357',
-            from_='+61894687290',
-            url=urljoin(MY_ADDRESS, '/call')
-        )
-        logging.info('call sent!')
-        return 'Call sent'
-
+    res = ''
     if 'delay' in flask.request.args:
         delay = int(flask.request.args['delay'])
+        time.sleep(delay)
+        res += 'Call will be delayed {} seconds\n'.format(delay)
 
-        def generate():
-            yield 'Call will be sent in {} seconds'.format(delay)
-            time.sleep(delay)
-            yield 'Sending call'
-            yield internal()
-
-        return flask.Response(generate(), mimetype='text/plain')
-    else:
-        return internal()
+    logging.info('sending call')
+    client.calls.create(
+        to='+61416041357',
+        from_='+61894687290',
+        url=urljoin(MY_ADDRESS, '/call')
+    )
+    logging.info('call sent!')
+    return res + 'Call sent'
 
 
 @app.route('/request', methods=['POST'])
