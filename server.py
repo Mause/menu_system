@@ -109,6 +109,13 @@ CALLERS = {
             'http://i1.theportalwiki.net/img/d/d1/Cave_Johnson_eighties_outro11.wav'
         ]
     },
+    '+61452446119': {
+        'name': "Humphrey",
+        'password': '8888',
+        'url': [
+            'http://i1.theportalwiki.net/img/e/e8/Announcer_openingexercise01.wav'
+        ]
+    },
     "+61437727157": {
         'name': 'Michelle',
         'passcode': '0000',
