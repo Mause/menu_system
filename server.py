@@ -74,6 +74,23 @@ def send_call():
     return 'Call sent'
 
 
+CALLERS = {
+    "+61416041357": 'Dominic'
+}
+
+
+@app.route('/request', methods=['POST'])
+def request_twiml():
+    res = Response()
+
+    caller = flask.request.form.get('Caller')
+    caller = CALLERS.get(caller, 'Unknown caller')
+
+    res.say('Hello, {}'.format(caller))
+
+    return make_res(res)
+
+
 @app.route('/')
 def index():
     return 'Sod off'
