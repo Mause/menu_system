@@ -1,5 +1,7 @@
 import os
+import time
 import logging
+from threading import Thread
 from twilio.rest import TwilioRestClient
 from urllib.parse import urlencode
 from twilio.twiml import Response as TwimlResponse
@@ -124,17 +126,24 @@ def gather_action():
 
 @app.route('/send_call')
 def send_call():
-    if 'timer' in flask.request.args:
-        import time
-        time.sleep(int(flask.request.args))
-    logging.info('sending call')
-    client.calls.create(
-        to='+61416041357',
-        from_='+61894687290',
-        url=urljoin(MY_ADDRESS, '/call')
-    )
-    logging.info('call sent!')
-    return 'Call sent'
+    def internal():
+        logging.info('sending call')
+        client.calls.create(
+            to='+61416041357',
+            from_='+61894687290',
+            url=urljoin(MY_ADDRESS, '/call')
+        )
+        logging.info('call sent!')
+        return 'Call sent'
+
+    if 'delay' in flask.request.args:
+        delay = int(flask.request.args)
+
+        Thread(target=lambda: time.sleep(delay) and internal()).start()
+
+        return 'Call will be sent in {} seconds'.format(delay)
+    else:
+        return internal()
 
 
 @app.route('/request', methods=['POST'])
