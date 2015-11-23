@@ -139,9 +139,13 @@ def send_call():
     if 'delay' in flask.request.args:
         delay = int(flask.request.args['delay'])
 
-        Thread(target=lambda: time.sleep(delay) and internal()).start()
+        def generate():
+            yield 'Call will be sent in {} seconds'.format(delay)
+            time.sleep(delay)
+            yield 'Sending call'
+            yield internal()
 
-        return 'Call will be sent in {} seconds'.format(delay)
+        return flask.Response(generate(), mimetype='text/plain')
     else:
         return internal()
 
