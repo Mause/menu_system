@@ -74,6 +74,10 @@ def send_call():
     return 'Call sent'
 
 
+@app.route('/')
+def index():
+    return 'Sod off'
+
 if __name__ == '__main__':
     app.debug = True
     app.run(port=5555, host='0.0.0.0')
