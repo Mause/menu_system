@@ -1,3 +1,4 @@
+import os
 import logging
 from twilio.rest import TwilioRestClient
 from twilio.twiml import Response
@@ -96,5 +97,4 @@ def index():
 
 if __name__ == '__main__':
     app.debug = True
-    import os
     app.run(port=int(os.environ.get('PORT', 5555)), host='0.0.0.0')
