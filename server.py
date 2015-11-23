@@ -22,11 +22,15 @@ def make_res(res):
 @app.route('/call', methods=['GET', 'POST'])
 def call():
     logging.info(dict(flask.request.form))
+    caller = CALLERS.get(flask.request.form['To'], 'Unknown caller')
+    return message_system(caller)
+
+
+def message_system(name):
+    action = urljoin(MY_ADDRESS, '/gather_action') + '?name={}'.format(name)
 
     res = Response()
-
-    with res.gather(numDigits='12',
-                    action=urljoin(MY_ADDRESS, '/gather_action')) as g:
+    with res.gather(numDigits='12', action=action) as g:
         g.say(
             'Please enter your twelve digit recharge pin, '
             'followed by the hash key'
@@ -38,14 +42,12 @@ def call():
 @app.route('/gather_action', methods=['GET', 'POST'])
 def gather_action():
     digits = flask.request.form.get('Digits', '')
-    logging.info('Digits:', digits)
+    logging.info('Digits: %s', digits)
 
-    name = 'Dominic'
+    name = flask.request.args.get('name', 'Unknown caller')
 
     res = Response()
     res.say("You entered {}".format(' '.join(digits)))
-    res.pause(length="1")
-    res.say("Hello, {}".format(name))
     res.say("Please wait while your message is retrieved")
     res.pause(length="3")
     res.say("Message follows")
@@ -81,14 +83,11 @@ CALLERS = {
 
 @app.route('/request', methods=['POST'])
 def request_twiml():
-    res = Response()
-
     caller = flask.request.form.get('Caller')
     caller = CALLERS.get(caller, 'Unknown caller')
 
-    res.say('Hello, {}'.format(caller))
+    return message_system(caller)
 
-    return make_res(res)
 
 
 @app.route('/')
