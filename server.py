@@ -68,13 +68,11 @@ def gather_action():
         res.pause(length="3")
         res.say("Message follows.")
         res.pause(length="0.5")
-        res.play(
-            "http://i1.theportalwiki.net/img/d/dc/"
-            "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav"
-        )
+        res.play(caller['url'])
+        res.pause(length="0.5")
+        res.say("End of message.")
     res.pause(length="1")
     res.say(
-        "End of message. "
         "Thankyou for using Lysdev's voice data storage system. "
         "Have a nice day!"
     )
@@ -94,7 +92,14 @@ def send_call():
 
 
 CALLERS = {
-    "+61416041357": {'name': 'Dominic', 'passcode': '20133'}
+    "+61416041357": {
+        'name': 'Dominic',
+        'passcode': '20133',
+        'url': (
+            "http://i1.theportalwiki.net/img/d/dc/"
+            "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav"
+        )
+    }
 }
 
 
