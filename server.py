@@ -23,24 +23,29 @@ def make_res(res):
 
 @app.route('/call', methods=['GET', 'POST'])
 def call():
-    logging.info(dict(flask.request.form))
-    caller = CALLERS.get(flask.request.form['To'], 'Unknown caller')
-    return message_system(caller)
+    return message_system(flask.request.form['To'])
 
 
-def message_system(name):
+def message_system(number):
+    res = Response()
+    if number not in CALLERS:
+        res.say(
+            'Hello, unknown caller. '
+            'You are not authorized to access this service. '
+            'Goodbye'
+        )
+    else:
+        name = CALLERS[number]
+        res.say('Hello, {}'.format(name))
+
     action = (
         urljoin(MY_ADDRESS, '/gather_action') + '?' +
         urlencode({'name': name})
     )
 
-    res = Response()
-    res.say('Hello, {}'.format(name))
-
     with res.gather(numDigits='12', action=action) as g:
         g.say(
-            'Please enter your twelve digit recharge pin, '
-            'followed by the hash key'
+            'Please enter your passcode, followed by the hash key'
         )
     res.say("I didn't catch that. Goodbye!")
     return make_res(res)
@@ -53,13 +58,16 @@ def gather_action():
 
     res = Response()
     res.say("You entered {}".format(' '.join(digits)))
-    res.say("Please wait while your message is retrieved")
-    res.pause(length="3")
-    res.say("Message follows")
-    res.play(
-        "http://i1.theportalwiki.net/img/d/dc/"
-        "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav"
-    )
+    if CALLERS[flask.request.args['name']] != digits:
+        res.say('That password is incorrect')
+    else:
+        res.say("Please wait while your message is retrieved")
+        res.pause(length="3")
+        res.say("Message follows")
+        res.play(
+            "http://i1.theportalwiki.net/img/d/dc/"
+            "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav"
+        )
     res.pause(length="1")
     res.say(
         "End of message. "
@@ -82,17 +90,13 @@ def send_call():
 
 
 CALLERS = {
-    "+61416041357": 'Dominic'
+    "+61416041357": {'name': 'Dominic', 'password': '20133'}
 }
 
 
 @app.route('/request', methods=['POST'])
 def request_twiml():
-    caller = flask.request.form.get('Caller')
-    caller = CALLERS.get(caller, 'Unknown caller')
-
-    return message_system(caller)
-
+    return message_system(flask.request.form.get('Caller'))
 
 
 @app.route('/')
