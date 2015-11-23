@@ -92,45 +92,35 @@ def send_call():
     return 'Call sent'
 
 
+TPW = 'http://i1.theportalwiki.net/img/'
 CALLERS = {
     "+61416041357": {
         'name': 'Dominic',
         'passcode': '20133',
-        'url': (
-            "http://i1.theportalwiki.net/img/d/dc/"
-            "Cave_Johnson_dlc2_0430_altcave_dance_police01.wav",
-        )
+        'url': [TPW + "d/dc/Cave_Johnson_dlc2_0430_altcave_dance_police01.wav"]
     },
     "+61428856419": {
         'name': 'Ailish',
         'passcode': '666',
         'url': [
-            'http://i1.theportalwiki.net/img/a/af/Cave_Johnson_eighties_outro09.wav',
-            'http://i1.theportalwiki.net/img/d/d1/Cave_Johnson_eighties_outro11.wav'
+            TPW + 'a/af/Cave_Johnson_eighties_outro09.wav',
+            TPW + 'd/d1/Cave_Johnson_eighties_outro11.wav'
         ]
     },
     '+61452446119': {
         'name': "Humphrey",
         'passcode': '8888',
-        'url': [
-            'http://i1.theportalwiki.net/img/e/e8/Announcer_openingexercise01.wav'
-        ]
+        'url': [TPW + 'e/e8/Announcer_openingexercise01.wav']
     },
     "+61437727157": {
         'name': 'Michelle',
         'passcode': '0000',
-        'url': (
-            'http://i1.theportalwiki.net/img/7/7d/'
-            'Cave_Johnson_dlc2_0775_altcave_cat_johnson01.wav',
-        )
+        'url': [TPW + '7/7d/Cave_Johnson_dlc2_0775_altcave_cat_johnson01.wav']
     },
     "+61487321206": {
         'name': 'Jesse',
         'passcode': '529626',
-        'url': (
-            'http://i1.theportalwiki.net/img/b/b4/'
-            'Cave_Johnson_fifties_intro01.wav',
-        )
+        'url': [TPW + 'b/b4/Cave_Johnson_fifties_intro01.wav']
     }
 }
 
