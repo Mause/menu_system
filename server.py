@@ -1,6 +1,7 @@
 import os
 import logging
 from twilio.rest import TwilioRestClient
+from urllib.parse import urlencode
 from twilio.twiml import Response
 from urllib.parse import urljoin
 
@@ -28,10 +29,12 @@ def call():
 
 
 def message_system(name):
-    action = urljoin(MY_ADDRESS, '/gather_action') + '?name={}'.format(name)
+    action = (
+        urljoin(MY_ADDRESS, '/gather_action') + '?' +
+        urlencode({'name': name})
+    )
 
     res = Response()
-
     res.say('Hello, {}'.format(name))
 
     with res.gather(numDigits='12', action=action) as g:
