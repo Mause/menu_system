@@ -104,7 +104,10 @@ CALLERS = {
     "+61428856419": {
         'name': 'Ailish',
         'passcode': '666',
-        'url': ('http://i1.theportalwiki.net/img/7/7f/Wheatley_sp_a2_bts2_trapped06.wav',)
+        'url': [
+            'http://i1.theportalwiki.net/img/a/af/Cave_Johnson_eighties_outro09.wav',
+            'http://i1.theportalwiki.net/img/d/d1/Cave_Johnson_eighties_outro11.wav'
+        ]
     },
     "+61437727157": {
         'name': 'Michelle',
