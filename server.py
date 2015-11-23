@@ -52,6 +52,11 @@ for caller in CALLERS.values():
     assert isinstance(caller['url'], (list, tuple))
 
 
+class CustomResponse(Response):
+    def say(self, text, **kwargs):
+        kwargs['language'] = 'en-AU'
+
+
 def make_res(res):
     return flask.Response(str(res), mimetype='text/xml')
 
@@ -62,7 +67,7 @@ def call():
 
 
 def message_system(number):
-    res = Response()
+    res = CustomResponse()
     if number not in CALLERS:
         res.say(
             'Hello, unknown caller. '
@@ -93,7 +98,7 @@ def gather_action():
 
     caller = CALLERS[flask.request.args['number']]
 
-    res = Response()
+    res = CustomResponse()
     if caller['passcode'] != digits:
         res.say('That passcode is incorrect')
     else:
