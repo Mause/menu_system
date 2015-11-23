@@ -85,7 +85,8 @@ def message_system(number):
 
         with res.gather(numDigits='12', action=action) as g:
             g.say(
-                'Please enter your passcode, followed by the hash key'
+                'Please enter your passcode, followed by the hash key',
+                language='en-AU'
             )
         res.say("I didn't catch that. Goodbye!")
 
