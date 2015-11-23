@@ -34,19 +34,20 @@ def message_system(number):
             'You are not authorized to access this service. '
             'Goodbye'
         )
+
     else:
         res.say('Hello, {}'.format(CALLERS[number]['name']))
-
-    action = (
-        urljoin(MY_ADDRESS, '/gather_action') + '?' +
-        urlencode({'number': number})
-    )
-
-    with res.gather(numDigits='12', action=action) as g:
-        g.say(
-            'Please enter your passcode, followed by the hash key'
+        action = (
+            urljoin(MY_ADDRESS, '/gather_action') + '?' +
+            urlencode({'number': number})
         )
-    res.say("I didn't catch that. Goodbye!")
+
+        with res.gather(numDigits='12', action=action) as g:
+            g.say(
+                'Please enter your passcode, followed by the hash key'
+            )
+        res.say("I didn't catch that. Goodbye!")
+
     return make_res(res)
 
 
@@ -91,7 +92,7 @@ def send_call():
 
 
 CALLERS = {
-    "+61416041357": {'name': 'Dominic', 'password': '20133'}
+    "+61416041357": {'name': 'Dominic', 'passcode': '20133'}
 }
 
 
