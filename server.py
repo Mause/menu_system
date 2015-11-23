@@ -111,7 +111,7 @@ CALLERS = {
     },
     '+61452446119': {
         'name': "Humphrey",
-        'password': '8888',
+        'passcode': '8888',
         'url': [
             'http://i1.theportalwiki.net/img/e/e8/Announcer_openingexercise01.wav'
         ]
