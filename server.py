@@ -124,6 +124,9 @@ def gather_action():
 
 @app.route('/send_call')
 def send_call():
+    if 'timer' in flask.request.args:
+        import time
+        time.sleep(int(flask.request.args))
     logging.info('sending call')
     client.calls.create(
         to='+61416041357',
