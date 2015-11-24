@@ -3,9 +3,12 @@ import os
 import time
 import json
 import logging
+from datetime import datetime
 
 import flask
 import requests
+import googlemaps
+from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 from twilio.twiml import Response as TwimlResponse
 from urllib.parse import urljoin
@@ -15,10 +18,19 @@ from payphones import PublicPhones
 logging.basicConfig(level=logging.INFO)
 app = flask.Flask(__name__)
 
+
+try:
+    AUTH = json.load(open('auth.json'))
+except FileNotFoundError:
+    keys = ['GOOGLE_MAPS_DIRECTIONS']
+    AUTH = {key: os.environ[key] for key in keys}
+
+
 client = TwilioRestClient(
     'AC0153b0a85c4fbcc3d4819a6a2da010a7', '630ecdeb816e7eddb2969057d500f9eb'
 )
 payphone_client = PublicPhones()
+gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
 
 MY_ADDRESS = 'http://ms.mause.me'
@@ -150,18 +162,52 @@ def id_recieved():
 
     res.say('Payphone found in {}'.format(properties['SSC_NAME']))
 
+    action = url(
+        urljoin(MY_ADDRESS, '/location/payphone_found'),
+        params={
+            'latlon': '{LATITUDE}, {LONGITUDE}'.format_map(properties)
+        }
+    )
+
+    with res.gather(numDigits='1', action=action) as g:
+        g.say(
+            'Please enter 1 for walking instructions, or 2 for public '
+            'transportation instructions',
+            language='en-AU'
+        )
+
     return make_res(res)
 
-    # latlon = properties['LATITUDE'], properties['LONGITUDE']
-    # reverse_geocode_result = gmaps.reverse_geocode(latlon)
 
-    # # Look up an address with reverse geocoding
-    # directions_result = gmaps.directions(
-    #     "Sydney Town Hall",
-    #     "Parramatta, NSW",
-    #     mode="transit",
-    #     departure_time=datetime.now()
-    # )
+@app.route('/location/payphone_found', methods=['POST'])
+def payphone_found():
+    res = Response()
+
+    digits = flask.request.form['Digits']
+    if digits not in {'1', '2'}:
+        res.say('Invalid input')
+        res.hangup()
+        return make_res(res)
+
+    mode = {'1': 'walking', '2': 'transit'}[digits]
+
+    directions_result = gmaps.directions(
+        flask.request.args['latlon'],
+        "209 Kent Street, Karawara",
+        mode=mode,
+        departure_time=datetime.now()
+    )
+
+    directions_result = directions_result[0]
+
+    for leg in directions_result['legs']:
+        for step in leg['steps']:
+            instruction = step['html_instructions']
+            instruction = ' '.join(fromstring(instruction).itertext())
+            res.say(instruction)
+            res.pause(length=2)
+
+    return make_res(res)
 
 
 @app.route('/location', methods=['POST'])
