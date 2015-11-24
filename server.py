@@ -203,9 +203,12 @@ def payphone_found():
     for leg in directions_result['legs']:
         for step in leg['steps']:
             instruction = step['html_instructions']
-            instruction = ' '.join(fromstring(instruction).itertext())
+
+            # strip out html tags
+            instruction = ''.join(fromstring(instruction).itertext())
+
             res.say(instruction)
-            res.pause(length=2)
+            res.pause(length=0.5)
 
     return make_res(res)
 
