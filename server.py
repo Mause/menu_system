@@ -210,6 +210,8 @@ def payphone_found():
             res.say(instruction)
             res.pause(length=0.5)
 
+    res.say("End of instructions")
+
     return make_res(res)
 
 
