@@ -1,7 +1,6 @@
 import os
 import time
 import logging
-from threading import Thread
 from twilio.rest import TwilioRestClient
 from urllib.parse import urlencode
 from twilio.twiml import Response as TwimlResponse
