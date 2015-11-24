@@ -1,13 +1,15 @@
+import re
 import os
 import time
 import json
 import logging
+
+import flask
 from twilio.rest import TwilioRestClient
 from urllib.parse import urlencode
 from twilio.twiml import Response as TwimlResponse
 from urllib.parse import urljoin
 
-import flask
 from payphones import PublicPhones
 
 logging.basicConfig(level=logging.INFO)
@@ -124,7 +126,6 @@ def id_recieved():
     digits = flask.request.form.get('Digits', '')
     logging.info('Digits: "%s"', digits)
 
-    import re
     if not re.match(r'\d{8}', digits):
         res.say('Invalid id number')
         res.hangup()
