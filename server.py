@@ -171,7 +171,8 @@ def location():
 
 @app.route('/request', methods=['POST'])
 def request_twiml():
-    return message_system(flask.request.form.get('Caller'))
+    # return message_system(flask.request.form.get('Caller'))
+    return location()
 
 
 @app.route('/')
