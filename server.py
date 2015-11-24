@@ -5,8 +5,8 @@ import json
 import logging
 
 import flask
+import requests
 from twilio.rest import TwilioRestClient
-from urllib.parse import urlencode
 from twilio.twiml import Response as TwimlResponse
 from urllib.parse import urljoin
 
@@ -28,6 +28,12 @@ for caller in CALLERS.values():
     assert isinstance(caller['url'], (list, tuple))
 
 
+def url(url, params):
+    prep = requests.PreparedRequest()
+    prep.prepare_url(url, params)
+    return prep.url
+
+
 class Response(TwimlResponse):
     def say(self, text, **kwargs):
         kwargs['language'] = 'en-AU'
@@ -35,7 +41,7 @@ class Response(TwimlResponse):
 
 
 def make_res(res):
-    return flask.Response(str(res), mimetype='text/xml')
+    return flask.Response(res.toxml(), mimetype='text/xml')
 
 
 @app.route('/call', methods=['POST'])
@@ -54,9 +60,9 @@ def message_system(number):
 
     else:
         res.say('Hello, {}'.format(CALLERS[number]['name']))
-        action = (
-            urljoin(MY_ADDRESS, '/gather_action') + '?' +
-            urlencode({'number': number})
+        action = url(
+            urljoin(MY_ADDRESS, '/gather_action'),
+            params={'number': number}
         )
 
         with res.gather(numDigits='12', action=action) as g:
@@ -165,8 +171,7 @@ def location():
     with res.gather(numDigits='8',
                     action=urljoin(MY_ADDRESS, '/location/id_recieved')) as g:
         g.say(
-            'Please enter the eight digit payphone identification number, '
-            'followed by the hash key',
+            'Please enter the eight digit payphone identification number',
             language='en-AU'
         )
     return make_res(res)
