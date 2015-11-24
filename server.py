@@ -33,7 +33,7 @@ def make_res(res):
     return flask.Response(str(res), mimetype='text/xml')
 
 
-@app.route('/call', methods=['GET', 'POST'])
+@app.route('/call', methods=['POST'])
 def call():
     return message_system(flask.request.form['To'])
 
