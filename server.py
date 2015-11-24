@@ -130,8 +130,9 @@ def id_recieved():
         res.hangup()
         return make_res(res)
 
-    logging.info('Looking for payphone with id: "%s"'.format(digits + "X2"))
-    payphone = payphone_client.by_cabinet_id(digits + "X2")
+    payphone_id = digits + "X2"
+    logging.info('Looking for payphone with id: "%s"', payphone_id)
+    payphone = payphone_client.by_cabinet_id(payphone_id)
     if not payphone:
         res.say('Payphone could not be found')
         res.hangup()
