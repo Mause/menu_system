@@ -57,7 +57,7 @@ class Response(TwimlResponse):
 @twiml
 def id_recieved():
     res = Response()
-    digits = request.form.get('Digits', '')
+    digits = request.form['Digits']
     logging.info('Digits: "%s"', digits)
 
     if not re.match(r'\d{8}', digits):
