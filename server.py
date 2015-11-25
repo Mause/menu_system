@@ -99,7 +99,7 @@ def parse_instruction(instruction):
         lambda match: REPLACEMENTS[match.group(0)],
         instruction
     )
-    logging.debug('Instruction: %s', instruction)
+    logging.info('Instruction: %s', instruction)
     return instruction
 
 
