@@ -102,11 +102,11 @@ def parse_instruction(instruction):
     # strip out html tags
     instruction = ''.join(fromstring(instruction).itertext())
     instruction = REPLACEMENT_RE.sub(
-        lambda match: REPLACEMENTS[match.group(0)],
+        lambda match: ' {} '.format(REPLACEMENTS[match.group(1)]),
         instruction
     )
     logging.info('Instruction: %s', instruction)
-    return instruction
+    return instruction.strip()
 
 
 @app.route('/location/payphone_found', methods=['POST'])
