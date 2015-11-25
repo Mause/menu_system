@@ -99,7 +99,7 @@ REPLACEMENT_RE = re.compile(r'\W({})\W'.format('|'.join(REPLACEMENTS)))
 def parse_instruction(instruction):
     # strip out html tags
     instruction = ''.join(fromstring(instruction).itertext())
-    instruction = REPLACEMENTS.sub(
+    instruction = REPLACEMENT_RE.sub(
         lambda match: REPLACEMENTS[match.group(0)],
         instruction
     )
