@@ -3,8 +3,8 @@ import os
 import logging
 from datetime import datetime
 from functools import wraps
+from urllib.parse import urlencode
 
-import requests
 import googlemaps
 from flask import url_for, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
@@ -35,10 +35,8 @@ def twiml(func):
     return wrapper
 
 
-def url(url, params):
-    prep = requests.PreparedRequest()
-    prep.prepare_url(url, params)
-    return prep.url
+def params_and_url_for(endpoint, params):
+    return url_for(endpoint) + '?' + urlencode(params)
 
 
 class Response(TwimlResponse):
@@ -74,9 +72,9 @@ def id_recieved():
     properties = payphone[0]['properties']
     res.say('Payphone found in {}'.format(properties['SSC_NAME']))
 
-    action = url(
-        url_for('payphone_found'),
-        params={'latlon': '{LATITUDE}, {LONGITUDE}'.format_map(properties)}
+    action = params_and_url_for(
+        'payphone_found',
+        {'latlon': '{LATITUDE}, {LONGITUDE}'.format_map(properties)}
     )
 
     with res.gather(numDigits='1', action=action) as g:
