@@ -6,7 +6,7 @@ from functools import wraps
 
 import requests
 import googlemaps
-from flask import url_for, Flask, request, _app_ctx_stack
+from flask import url_for, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 from twilio.twiml import Response as TwimlResponse
@@ -49,7 +49,7 @@ class Response(TwimlResponse):
 
 
 def make_res(res):
-    return Response(res.toxml(), mimetype='text/xml')
+    return FlaskResponse(res.toxml(), mimetype='text/xml')
 
 
 @app.route('/location/id_recieved', methods=['POST'])
