@@ -11,12 +11,12 @@ from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 from twilio.twiml import Response as TwimlResponse
 
+from auth import AUTH, ON_HEROKU
 from payphones import PublicPhones
 
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 
-from auth import AUTH, ON_HEROKU
 
 client = TwilioRestClient(
     AUTH['TWILIO_ACCOUNT_SID'], AUTH['TWILIO_AUTH_TOKEN']
