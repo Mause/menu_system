@@ -89,6 +89,23 @@ def id_recieved():
     return res
 
 
+REPLACEMENTS = {
+    'Stn': 'Station',
+    'Avn': 'Avenue'
+}
+REPLACEMENT_RE = re.compile(r'\W({})\W'.format('|'.join(REPLACEMENTS)))
+
+
+def parse_instruction(instruction):
+    # strip out html tags
+    instruction = ''.join(fromstring(instruction).itertext())
+    instruction = REPLACEMENTS.sub(
+        lambda match: REPLACEMENTS[match.group(0)],
+        instruction
+    )
+    return instruction
+
+
 @app.route('/location/payphone_found', methods=['POST'])
 @twiml
 def payphone_found():
@@ -113,10 +130,7 @@ def payphone_found():
 
     for leg in directions_result['legs']:
         for step in leg['steps']:
-            instruction = step['html_instructions']
-
-            # strip out html tags
-            instruction = ''.join(fromstring(instruction).itertext())
+            instruction = parse_instruction(step['html_instructions'])
 
             res.say(instruction)
             res.pause(length=0.5)
