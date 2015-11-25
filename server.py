@@ -3,9 +3,9 @@ import os
 import logging
 from datetime import datetime
 
-import flask
 import requests
 import googlemaps
+from flask import Flask, request
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 from twilio.twiml import Response as TwimlResponse
@@ -14,7 +14,7 @@ from urllib.parse import urljoin
 from payphones import PublicPhones
 
 logging.basicConfig(level=logging.INFO)
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 from auth import AUTH, ON_HEROKU
 
@@ -41,13 +41,13 @@ class Response(TwimlResponse):
 
 
 def make_res(res):
-    return flask.Response(res.toxml(), mimetype='text/xml')
+    return Response(res.toxml(), mimetype='text/xml')
 
 
 @app.route('/location/id_recieved', methods=['POST'])
 def id_recieved():
     res = Response()
-    digits = flask.request.form.get('Digits', '')
+    digits = request.form.get('Digits', '')
     logging.info('Digits: "%s"', digits)
 
     if not re.match(r'\d{8}', digits):
@@ -87,7 +87,7 @@ def id_recieved():
 def payphone_found():
     res = Response()
 
-    digits = flask.request.form['Digits']
+    digits = request.form['Digits']
     if digits not in {'1', '2'}:
         res.say('Invalid input')
         res.hangup()
@@ -96,7 +96,7 @@ def payphone_found():
     mode = {'1': 'walking', '2': 'transit'}[digits]
 
     directions_result = gmaps.directions(
-        flask.request.args['latlon'],
+        request.args['latlon'],
         "209 Kent Street, Karawara",
         mode=mode,
         departure_time=datetime.now()
