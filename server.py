@@ -70,7 +70,9 @@ def id_recieved():
         return res
 
     properties = payphone[0]['properties']
-    res.say('Payphone found in {}'.format(properties['SSC_NAME']))
+    message = 'Payphone found in {}'.format(properties['SSC_NAME'])
+    res.say(message)
+    logging.info(message)
 
     action = params_and_url_for(
         'payphone_found',
