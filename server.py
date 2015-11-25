@@ -34,7 +34,8 @@ REPLACEMENT_RE = re.compile(r'\W({})\W'.format('|'.join(REPLACEMENTS)))
 def twiml(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        return make_res(func(*args, **kwargs))
+        res = func(*args, **kwargs)
+        return FlaskResponse(res.toxml(), mimetype='text/xml')
     return wrapper
 
 
@@ -46,10 +47,6 @@ class Response(TwimlResponse):
     def say(self, text, **kwargs):
         kwargs['language'] = 'en-AU'
         return super().say(text, **kwargs)
-
-
-def make_res(res):
-    return FlaskResponse(res.toxml(), mimetype='text/xml')
 
 
 @app.route('/location/id_recieved', methods=['POST'])
