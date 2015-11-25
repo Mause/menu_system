@@ -29,7 +29,6 @@ REPLACEMENTS = {
     'Avn': 'Avenue'
 }
 REPLACEMENT_RE = re.compile(r'\W({})\W'.format('|'.join(REPLACEMENTS)))
-MY_ADDRESS = 'http://ms.mause.me'
 
 
 def twiml(func):
