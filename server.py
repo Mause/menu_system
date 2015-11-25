@@ -5,7 +5,7 @@ from datetime import datetime
 
 import requests
 import googlemaps
-from flask import url_for, Flask, request
+from flask import url_for, Flask, request, _app_ctx_stack
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 from twilio.twiml import Response as TwimlResponse
@@ -67,7 +67,7 @@ def id_recieved():
     res.say('Payphone found in {}'.format(properties['SSC_NAME']))
 
     action = url(
-        url_for(payphone_found),
+        url_for('payphone_found'),
         params={'latlon': '{LATITUDE}, {LONGITUDE}'.format_map(properties)}
     )
 
@@ -120,7 +120,7 @@ def payphone_found():
 @app.route('/location', methods=['POST'])
 def location():
     res = Response()
-    with res.gather(numDigits='8', action=url_for(id_recieved)) as g:
+    with res.gather(numDigits='8', action=url_for('id_recieved')) as g:
         g.say(
             'Please enter the eight digit payphone identification number',
             language='en-AU'
