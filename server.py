@@ -28,7 +28,9 @@ REPLACEMENTS = {
     'Stn': 'Station',
     'Avn': 'Avenue'
 }
-REPLACEMENT_RE = re.compile(r'\W({})\W'.format('|'.join(REPLACEMENTS)))
+REPLACEMENT_RE = re.compile(
+    r'(?:\W|^)({})(?:\W|$)'.format('|'.join(REPLACEMENTS))
+)
 
 
 def twiml(func):
