@@ -63,9 +63,7 @@ def id_recieved():
         res.hangup()
         return make_res(res)
 
-    payphone = payphone[0]
-    properties = payphone['properties']
-
+    properties = payphone[0]['properties']
     res.say('Payphone found in {}'.format(properties['SSC_NAME']))
 
     action = url(
@@ -77,7 +75,7 @@ def id_recieved():
 
     with res.gather(numDigits='1', action=action) as g:
         g.say(
-            'Please enter 1 for walking instructions, or 2 for public '
+            'Please enter, 1 for walking instructions, or 2 for public '
             'transportation instructions',
             language='en-AU'
         )
@@ -144,4 +142,5 @@ def index():
 
 if __name__ == '__main__':
     app.debug = not ON_HEROKU
-    app.run(port=int(os.environ.get('PORT', 5555)), host='0.0.0.0')
+    port = int(os.environ['PORT']) if ON_HEROKU else 5555
+    app.run(port=port, host='0.0.0.0')
