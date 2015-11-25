@@ -2,6 +2,7 @@ import re
 import os
 import logging
 from datetime import datetime
+from functools import wraps
 
 import requests
 import googlemaps
@@ -28,6 +29,13 @@ gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 MY_ADDRESS = 'http://ms.mause.me'
 
 
+def twiml(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return make_res(func(*args, **kwargs))
+    return wrapper
+
+
 def url(url, params):
     prep = requests.PreparedRequest()
     prep.prepare_url(url, params)
@@ -45,6 +53,7 @@ def make_res(res):
 
 
 @app.route('/location/id_recieved', methods=['POST'])
+@twiml
 def id_recieved():
     res = Response()
     digits = request.form.get('Digits', '')
@@ -53,7 +62,7 @@ def id_recieved():
     if not re.match(r'\d{8}', digits):
         res.say('Invalid id number')
         res.hangup()
-        return make_res(res)
+        return res
 
     payphone_id = digits + "X2"
     logging.info('Looking for payphone with id: "%s"', payphone_id)
@@ -61,7 +70,7 @@ def id_recieved():
     if not payphone:
         res.say('Payphone could not be found')
         res.hangup()
-        return make_res(res)
+        return res
 
     properties = payphone[0]['properties']
     res.say('Payphone found in {}'.format(properties['SSC_NAME']))
@@ -78,10 +87,11 @@ def id_recieved():
             language='en-AU'
         )
 
-    return make_res(res)
+    return res
 
 
 @app.route('/location/payphone_found', methods=['POST'])
+@twiml
 def payphone_found():
     res = Response()
 
@@ -89,7 +99,7 @@ def payphone_found():
     if digits not in {'1', '2'}:
         res.say('Invalid input')
         res.hangup()
-        return make_res(res)
+        return res
 
     mode = {'1': 'walking', '2': 'transit'}[digits]
 
@@ -114,10 +124,11 @@ def payphone_found():
 
     res.say("End of instructions")
 
-    return make_res(res)
+    return res
 
 
 @app.route('/location', methods=['POST'])
+@twiml
 def location():
     res = Response()
     with res.gather(numDigits='8', action=url_for('id_recieved')) as g:
@@ -125,7 +136,7 @@ def location():
             'Please enter the eight digit payphone identification number',
             language='en-AU'
         )
-    return make_res(res)
+    return res
 
 
 @app.route('/request', methods=['POST'])
