@@ -10,7 +10,6 @@ from flask import url_for, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 from twilio.twiml import Response as TwimlResponse
-from urllib.parse import urljoin
 
 from payphones import PublicPhones
 
