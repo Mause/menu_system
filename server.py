@@ -18,16 +18,10 @@ from payphones import PublicPhones
 logging.basicConfig(level=logging.INFO)
 app = flask.Flask(__name__)
 
-
-try:
-    AUTH = json.load(open('auth.json'))
-except FileNotFoundError:
-    keys = ['GOOGLE_MAPS_DIRECTIONS']
-    AUTH = {key: os.environ[key] for key in keys}
-
+from auth import AUTH
 
 client = TwilioRestClient(
-    'AC0153b0a85c4fbcc3d4819a6a2da010a7', '630ecdeb816e7eddb2969057d500f9eb'
+    AUTH['TWILIO_ACCOUNT_SID'], AUTH['TWILIO_AUTH_TOKEN']
 )
 payphone_client = PublicPhones()
 gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
