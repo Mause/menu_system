@@ -16,7 +16,7 @@ from payphones import PublicPhones
 logging.basicConfig(level=logging.INFO)
 app = flask.Flask(__name__)
 
-from auth import AUTH
+from auth import AUTH, ON_HEROKU
 
 client = TwilioRestClient(
     AUTH['TWILIO_ACCOUNT_SID'], AUTH['TWILIO_AUTH_TOKEN']
@@ -143,5 +143,5 @@ def index():
     return 'Sod off'
 
 if __name__ == '__main__':
-    app.debug = True
+    app.debug = not ON_HEROKU
     app.run(port=int(os.environ.get('PORT', 5555)), host='0.0.0.0')
