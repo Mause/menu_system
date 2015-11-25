@@ -64,6 +64,13 @@ def id_recieved():
         res.hangup()
         return res
 
+    if digits == '12345678':
+        res.play(
+            '/static/Gorillaz%20-%20Film%20Music%20(Official%20Visual).mp3'
+        )
+        res.hangup()
+        return res
+
     payphone_id = digits + "X2"
     logging.info('Looking for payphone with id: "%s"', payphone_id)
     payphone = payphone_client.by_cabinet_id(payphone_id)
