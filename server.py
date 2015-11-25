@@ -26,7 +26,9 @@ gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
 REPLACEMENTS = {
     'Stn': 'Station',
-    'Avn': 'Avenue'
+    'Avn': 'Avenue',
+    'Rd': 'Road',
+    'Sq': 'Square'
 }
 REPLACEMENT_RE = re.compile(
     r'(?:\W|^)({})(?:\W|$)'.format('|'.join(REPLACEMENTS))
