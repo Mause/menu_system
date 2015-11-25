@@ -24,7 +24,11 @@ client = TwilioRestClient(
 payphone_client = PublicPhones()
 gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
-
+REPLACEMENTS = {
+    'Stn': 'Station',
+    'Avn': 'Avenue'
+}
+REPLACEMENT_RE = re.compile(r'\W({})\W'.format('|'.join(REPLACEMENTS)))
 MY_ADDRESS = 'http://ms.mause.me'
 
 
@@ -87,13 +91,6 @@ def id_recieved():
         )
 
     return res
-
-
-REPLACEMENTS = {
-    'Stn': 'Station',
-    'Avn': 'Avenue'
-}
-REPLACEMENT_RE = re.compile(r'\W({})\W'.format('|'.join(REPLACEMENTS)))
 
 
 def parse_instruction(instruction):
