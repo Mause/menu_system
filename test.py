@@ -100,7 +100,7 @@ class TestLocation(MenuSystemTestCase):
     @patch('server.gmaps.directions')
     def test_payphone_found(self, directions):
         directions.return_value = [{'legs': [{'steps': [
-            {'html_instructions': 'Move <b>forward</b> Stn'}
+            {'html_instructions': 'Move <b>forward</b> Station.'}
         ]}]}]
         self.assertXMLEqual(
             b'<?xml version="1.0" encoding="UTF-8"?>'
