@@ -118,11 +118,23 @@ def payphone_found():
 
     mode = {'1': 'walking', '2': 'transit'}[digits]
 
+    from_ = request.args['latlon']
+    to = "209 Kent Street, Karawara"
+    departure_time = datetime.now()
+
+    logging.info(
+        'Travelling from %s to "%s" at %s using %s',
+        from_,
+        to,
+        departure_time,
+        mode
+    )
+
     directions_result = gmaps.directions(
-        request.args['latlon'],
-        "209 Kent Street, Karawara",
+        from_,
+        to,
         mode=mode,
-        departure_time=datetime.now()
+        departure_time=departure_time
     )
 
     directions_result = directions_result[0]
