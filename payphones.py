@@ -66,6 +66,11 @@ class Table:
             }
         ).json()
 
+    def feature_by_id(self, id, attributes=None, locale=None):
+        return self.fs.sess.get(
+            self.url + '/features.json/{}'.format(id)
+        ).json()
+
 
 class FeatureService:
     def __init__(self):
