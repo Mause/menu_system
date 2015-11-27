@@ -24,6 +24,7 @@ client = TwilioRestClient(
 payphone_client = PayPhones()
 gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
+FULL_STOP = ' . '
 REPLACEMENTS = {
     'Stn': 'Station',
     'Ave': 'Avenue',
@@ -105,11 +106,11 @@ def parse_instruction(instruction):
             if inst.getchildren():
                 last = inst.getchildren()[-1]
                 if last.tail:
-                    last.tail += '. '
+                    last.tail += FULL_STOP
                 else:
-                    last.text += '. '
+                    last.text += FULL_STOP
             else:
-                inst.text += '. '
+                inst.text += FULL_STOP
 
     instruction = ''.join(instruction.itertext()).strip()
     instruction = ' '.join(instruction.split())
