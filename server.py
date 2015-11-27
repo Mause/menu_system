@@ -55,21 +55,18 @@ def id_recieved():
     logging.info('Digits: "%s"', digits)
 
     if not re.match(r'\d{8}', digits):
-        res.say('Invalid id number')
-        return res.hangup()
+        return res.say('Invalid id number').hangup()
 
     if digits == '12345678':
-        res.play(
+        return res.play(
             '/static/Gorillaz%20-%20Film%20Music%20(Official%20Visual).mp3'
-        )
-        return res.hangup()
+        ).hangup()
 
     payphone_id = digits + "X2"
     logging.info('Looking for payphone with id: "%s"', payphone_id)
     payphone = payphone_client.by_cabinet_id(payphone_id)
     if not payphone:
-        res.say('Payphone could not be found')
-        return res.hangup()
+        return res.say('Payphone could not be found').hangup()
 
     properties = payphone[0]['properties']
     message = 'Payphone found in {}'.format(properties['SSC_NAME'])
@@ -118,8 +115,7 @@ def payphone_found():
 
     digits = request.form['Digits']
     if digits not in {'1', '2'}:
-        res.say('Invalid input')
-        return res.hangup()
+        return res.say('Invalid input').hangup()
 
     mode = {'1': 'walking', '2': 'transit'}[digits]
 
