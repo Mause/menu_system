@@ -26,7 +26,7 @@ gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
 REPLACEMENTS = {
     'Stn': 'Station',
-    'Avn': 'Avenue',
+    'Ave': 'Avenue',
     'Rd': 'Road',
     'Sq': 'Square'
 }
