@@ -109,6 +109,15 @@ class FeatureService:
             self.base + '/tables/features.json', params=kwargs
         ).json()
 
+    def features_by_sql(self, sql, locale=None, pagenumber=None,
+                        pageLength=None):
+        return self.features(
+            q=sql,
+            l=locale,
+            page=pagenumber,
+            pageLength=pageLength
+        )
+
 
 class PayPhones:
     def __init__(self):
