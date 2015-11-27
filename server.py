@@ -108,6 +108,7 @@ def parse_instruction(instruction):
                 inst.text += '. '
 
     instruction = ''.join(instruction.itertext()).strip()
+    instruction = ' '.join(instruction.split())
     instruction = REPLACEMENT_RE.sub(_replace_part, instruction)
     logging.info('Instruction: %s', instruction)
     return instruction.strip()
