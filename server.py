@@ -103,7 +103,11 @@ def parse_instruction(instruction):
     for inst in reversed(list(instruction.iter())):
         if inst.text and inst.tag in {'p', 'div'}:
             if inst.getchildren():
-                inst.getchildren()[-1].text += '. '
+                last = inst.getchildren()[-1]
+                if last.tail:
+                    last.tail += '. '
+                else:
+                    last.text += '. '
             else:
                 inst.text += '. '
 

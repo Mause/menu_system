@@ -141,6 +141,11 @@ class TestLocation(MenuSystemTestCase):
             'Turn right to stay on Kent St. Destination will be on the left.'
         )
 
+        self.assertEqual(
+            parse_instruction('Move <b>forward</b> Station'),
+            'Move forward Station.'
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
