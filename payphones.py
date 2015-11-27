@@ -149,12 +149,10 @@ class PayPhones:
         )
 
     def by_cabinet_id(self, cabinet_id):
-        return self.fs.features(
-            q=(
-                'select * '
-                'from "/telstrappol/NamedTables/TLS_all_payphones" '
-                'where CABINET_ID '
-                'like (\'{}\')'
-                .format(cabinet_id)
-            )
+        return self.fs.features_by_sql(
+            'select * '
+            'from "/telstrappol/NamedTables/TLS_all_payphones" '
+            'where CABINET_ID '
+            'like (\'{}\')'
+            .format(cabinet_id)
         )['features']
