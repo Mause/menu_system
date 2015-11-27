@@ -96,7 +96,15 @@ def id_recieved():
 
 def parse_instruction(instruction):
     # strip out html tags
+
     instruction = fromstring(instruction)
+    for inst in reversed(list(instruction.iter())):
+        if inst.text and inst.tag in {'p', 'div'}:
+            if inst.getchildren():
+                inst.getchildren()[-1].text += '. '
+            else:
+                inst.text += '. '
+
     instruction = ''.join(instruction.itertext()).strip()
     instruction = REPLACEMENT_RE.sub(
         lambda match: ' {} '.format(REPLACEMENTS[match.group(1)]),
