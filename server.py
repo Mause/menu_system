@@ -12,7 +12,7 @@ from twilio.rest import TwilioRestClient
 from twilio.twiml import Response as TwimlResponse
 
 from auth import AUTH, ON_HEROKU
-from payphones import PublicPhones
+from payphones import PayPhones
 
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
@@ -21,7 +21,7 @@ app = Flask(__name__)
 client = TwilioRestClient(
     AUTH['TWILIO_ACCOUNT_SID'], AUTH['TWILIO_AUTH_TOKEN']
 )
-payphone_client = PublicPhones()
+payphone_client = PayPhones()
 gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
 REPLACEMENTS = {

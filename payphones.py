@@ -110,7 +110,7 @@ class FeatureService:
         ).json()
 
 
-class PublicPhones:
+class PayPhones:
     def __init__(self):
         self.fs = FeatureService(
             'https://spatialserver.pbondemand.com.au/'
