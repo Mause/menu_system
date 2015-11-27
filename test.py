@@ -116,6 +116,19 @@ class TestLocation(MenuSystemTestCase):
             ).data
         )
 
+    def test_invalid_transportation_mode(self):
+        self.assertXMLEqual(
+            b'<?xml version="1.0" encoding="UTF-8"?>'
+            b'<Response>'
+            b'<Say language="en-AU">Invalid input</Say>'
+            b'<Hangup />'
+            b'</Response>',
+            self.app.post(
+                '/location/payphone_found',
+                data={'Digits': '0'}
+            ).data
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
