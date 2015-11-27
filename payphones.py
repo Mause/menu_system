@@ -73,13 +73,10 @@ class Table:
 
 
 class FeatureService:
-    def __init__(self):
+    def __init__(self, base):
         self.sess = requests.Session()
         self.sess.mount('https://', ProxyAdapter())
-        self.base = (
-            'https://spatialserver.pbondemand.com.au/'
-            'FeatureService/services/rest'
-        )
+        self.base = base
 
     @lru_cache()
     def __len__(self):
@@ -115,7 +112,10 @@ class FeatureService:
 
 class PublicPhones:
     def __init__(self):
-        self.fs = FeatureService()
+        self.fs = FeatureService(
+            'https://spatialserver.pbondemand.com.au/'
+            'FeatureService/services/rest'
+        )
 
     def by_latlon(self, latlon):
         table = self.fs.get_table(
