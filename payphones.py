@@ -17,13 +17,16 @@ class PublicPhones:
         self.sess.mount('https://', ProxyAdapter())
         self.base = (
             'https://spatialserver.pbondemand.com.au/'
-            'FeatureService/services/rest/tables/telstrappol/NamedTables/'
-            'TLS_payphone_locations/features.json'
+            'FeatureService/services/rest/tables/'
+
         )
 
     def by_latlon(self, latlon):
         return self.sess.get(
-            self.base,
+            (
+                self.base +
+                'telstrappol/NamedTables/TLS_payphone_locations/features.json'
+            ),
             params={
                 'maxFeatures': '10',
                 'geometry': json.dumps(
@@ -44,8 +47,7 @@ class PublicPhones:
 
     def by_cabinet_id(self, cabinet_id):
         r = self.sess.get(
-            'https://spatialserver.pbondemand.com.au/'
-            'FeatureService/services/rest/tables/features.json',
+            self.base + 'features.json',
             params={
                 'q': (
                     'select * '
