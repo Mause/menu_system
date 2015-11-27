@@ -43,9 +43,27 @@ class Table:
             self.url + '/features/count'
         ).json()['FeaturesTotalCount']
 
-    def features(self, **kwargs):
+    def features(self, attributes=None, orderBy=None, query=None,
+                 geometry: 'geom,srs'=None,
+                 withinDistance: 'distance unit'=None,
+                 distanceAttributeName=None, geometryAttributeName=None,
+                 l: 'locale'=None, page: 'pagenumber'=None,
+                 pageLength=None, maxFeatures=None):
         return self.fs.sess.get(
-            self.url + '/features.json', params=kwargs
+            self.url + '/features.json',
+            params={
+                'attributes': attributes,
+                'orderBy': orderBy,
+                'q': query,
+                'geometry': geometry,
+                'withinDistance': withinDistance,
+                'distanceAttributeName': distanceAttributeName,
+                'geometryAttributeName': geometryAttributeName,
+                'l': l,
+                'page': page,
+                'pageLength': pageLength,
+                'maxFeatures': maxFeatures,
+            }
         ).json()
 
 
@@ -92,49 +110,37 @@ class FeatureService:
 
 class PublicPhones:
     def __init__(self):
-        self.sess = requests.Session()
-        self.sess.mount('https://', ProxyAdapter())
-        self.base = (
-            'https://spatialserver.pbondemand.com.au/'
-            'FeatureService/services/rest/tables/'
-
-        )
+        self.fs = FeatureService()
 
     def by_latlon(self, latlon):
-        return self.sess.get(
-            (
-                self.base +
-                'telstrappol/NamedTables/TLS_payphone_locations/features.json'
-            ),
-            params={
-                'maxFeatures': '10',
-                'geometry': json.dumps(
-                    {
-                        "type": "Point",
-                        "coordinates": list(latlon),
-                        "crs": {
-                            "type": "name",
-                            "properties": {"name": "epsg:4326"}
-                        }
+        table = self.fs.get_table(
+            '/telstrappol/NamedTables/TLS_payphone_locations'
+        )
+
+        return table.features(
+            maxFeatures='10',
+            geometry=json.dumps(
+                {
+                    "type": "Point",
+                    "coordinates": list(latlon),
+                    "crs": {
+                        "type": "name",
+                        "properties": {"name": "epsg:4326"}
                     }
-                ),
-                'withinDistance': '1000 km',
-                'q': 'searchNearest',
-                'distanceAttributeName': 'distanceToFeature'
-            }
+                }
+            ),
+            withinDistance='1000 km',
+            q='searchNearest',
+            distanceAttributeName='distanceToFeature'
         )
 
     def by_cabinet_id(self, cabinet_id):
-        r = self.sess.get(
-            self.base + 'features.json',
-            params={
-                'q': (
-                    'select * '
-                    'from "/telstrappol/NamedTables/TLS_all_payphones" '
-                    'where CABINET_ID '
-                    'like (\'{}\')'
-                    .format(cabinet_id)
-                )
-            }
-        )
-        return r.json()['features']
+        return self.fs.features(
+            q=(
+                'select * '
+                'from "/telstrappol/NamedTables/TLS_all_payphones" '
+                'where CABINET_ID '
+                'like (\'{}\')'
+                .format(cabinet_id)
+            )
+        )['features']
