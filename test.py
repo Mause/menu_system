@@ -129,6 +129,18 @@ class TestLocation(MenuSystemTestCase):
             ).data
         )
 
+    def test_parse_instruction(self):
+        from server import parse_instruction
+
+        self.assertEqual(
+            parse_instruction(
+                'Turn <b>right</b> to stay on <b>Kent St</b>'
+                '<div style="font-size:0.9em">Destination '
+                'will be on the left</div>'
+            ),
+            'Turn right to stay on Kent St. Destination will be on the left.'
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
