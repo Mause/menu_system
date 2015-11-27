@@ -31,7 +31,7 @@ REPLACEMENTS = {
     'Sq': 'Square'
 }
 REPLACEMENT_RE = re.compile(
-    r'(?:\W|^)({})(?:\W|$)'.format('|'.join(REPLACEMENTS))
+    r'(\W|^)({})(\W|$)'.format('|'.join(REPLACEMENTS))
 )
 
 
@@ -88,6 +88,14 @@ def id_recieved():
     return res
 
 
+def _replace_part(match):
+    return '{}{}{}'.format(
+        match.group(1),
+        REPLACEMENTS[match.group(2)],
+        match.group(3)
+    )
+
+
 def parse_instruction(instruction):
     # strip out html tags
 
@@ -100,10 +108,7 @@ def parse_instruction(instruction):
                 inst.text += '. '
 
     instruction = ''.join(instruction.itertext()).strip()
-    instruction = REPLACEMENT_RE.sub(
-        lambda match: ' {} '.format(REPLACEMENTS[match.group(1)]),
-        instruction
-    )
+    instruction = REPLACEMENT_RE.sub(_replace_part, instruction)
     logging.info('Instruction: %s', instruction)
     return instruction.strip()
 
