@@ -9,8 +9,8 @@ import googlemaps
 from flask import url_for, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
-from twilio.twiml import Response as TwimlResponse
 
+from twiml import Response
 from auth import AUTH, ON_HEROKU
 from payphones import PayPhones
 
@@ -45,12 +45,6 @@ def twiml(func):
 
 def params_and_url_for(endpoint, params):
     return url_for(endpoint) + '?' + urlencode(params)
-
-
-class Response(TwimlResponse):
-    def say(self, text, **kwargs):
-        kwargs['language'] = 'en-AU'
-        return super().say(text, **kwargs)
 
 
 @app.route('/location/id_recieved', methods=['POST'])
