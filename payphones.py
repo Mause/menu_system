@@ -1,6 +1,7 @@
 import json
 import requests
 from urllib.parse import quote_plus
+from functools import lru_cache
 
 
 class ProxyAdapter(requests.adapters.HTTPAdapter):
@@ -9,6 +10,84 @@ class ProxyAdapter(requests.adapters.HTTPAdapter):
     def send(self, prequest, **kwargs):
         prequest.url = ProxyAdapter.PROXY + quote_plus(prequest.url)
         return super().send(prequest, **kwargs)
+
+
+class Table:
+    def __init__(self, fs, name):
+        self.fs = fs
+        self.name = name
+        self.url = fs.base + '/tables' + self.name
+
+    def __repr__(self):
+        return '<Table "{}">'.format(self.name)
+
+    @lru_cache()
+    def _metadata(self):
+        return self.fs.sess.get(self.url + '/metadata.json').json()
+
+    @property
+    def table_metadata(self):
+        return self._metadata()['TableMetadata']
+
+    @property
+    @lru_cache()
+    def metadata(self):
+        return {
+            meta.pop('name'): meta
+            for meta in self._metadata()['Metadata']
+        }
+
+    @lru_cache()
+    def __len__(self):
+        return self.fs.sess.get(
+            self.url + '/features/count'
+        ).json()['FeaturesTotalCount']
+
+    def features(self, **kwargs):
+        return self.fs.sess.get(
+            self.url + '/features.json', params=kwargs
+        ).json()
+
+
+class FeatureService:
+    def __init__(self):
+        self.sess = requests.Session()
+        self.sess.mount('https://', ProxyAdapter())
+        self.base = (
+            'https://spatialserver.pbondemand.com.au/'
+            'FeatureService/services/rest'
+        )
+
+    @lru_cache()
+    def __len__(self):
+        return self.sess.get(
+            self.base + '/tables/count'
+        ).json()["TablesTotalCount"]
+
+    @property
+    @lru_cache()
+    def tables(self):
+        names = self.sess.get(self.base + '/tables.json').json()["Tables"]
+        return [
+            Table(self, name)
+            for name in names
+        ]
+
+    @lru_cache()
+    def _table_lookup(self):
+        return {table.name: table for table in self.tables}
+
+    def get_table(self, name):
+        return self._table_lookup()[name]
+
+    @property
+    def table_names(self):
+        return list(self._table_lookup().keys())
+
+    def features(self, **kwargs):
+        return self.sess.get(
+            self.base + '/tables/features.json', params=kwargs
+        ).json()
 
 
 class PublicPhones:
