@@ -22,6 +22,8 @@ client = TwilioRestClient(
 payphone_client = PayPhones()
 gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
+
+ADDRESSTO = os.environ.get('ADDRESSTO', '6c Farnham Street, Bentley')
 FULL_STOP = ' . '
 REPLACEMENTS = {
     'Stn': 'Station',
@@ -140,7 +142,7 @@ def payphone_found():
     mode = {'1': 'walking', '2': 'transit'}[digits]
 
     from_ = request.args['latlon']
-    to = "209 Kent Street, Karawara"
+    to = ADDRESSTO
     departure_time = datetime.now()
 
     logging.info(
