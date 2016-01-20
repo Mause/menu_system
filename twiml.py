@@ -83,7 +83,13 @@ class Play:
         self.loop = loop
 
     def toxml(self):
-        return Play.NODE(url=self.url, digits=self.digits, loop=self.loop)
+        return Play.NODE(**{
+            k: v
+            for k, v in [
+                ('url', self.url), ('digits', self.digits), ('loop', self.loop)
+            ]
+            if v
+        })
 
 
 class Hangup:
