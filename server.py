@@ -110,13 +110,21 @@ def parse_instruction(instruction):
             else:
                 inst.text += FULL_STOP
 
+    # convert XML tree to plain string
     instruction = ''.join(instruction.itertext()).strip()
+
+    # remove excess whitespace
     instruction = ' '.join(instruction.split())
+
+    # mend weird pattern
+    instruction = instruction.replace('. .', '.')
 
     # replace short versions of address parts with their full versions
     # ie, Stn -> Station
     instruction = REPLACEMENT_RE.sub(_replace_part, instruction)
+
     logging.info('Instruction: %s', instruction)
+
     return instruction.strip()
 
 

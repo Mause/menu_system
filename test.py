@@ -105,7 +105,7 @@ class TestLocation(MenuSystemTestCase):
         self.assertXMLEqual(
             b'<?xml version="1.0" encoding="UTF-8"?>'
             b'<Response>'
-            b'<Say language="en-AU">Move forward Station</Say>'
+            b'<Say language="en-AU">Move forward Station.</Say>'
             b'<Pause length="0.5" />'
             b'<Say language="en-AU">End of instructions</Say>'
             b'</Response>',
@@ -138,12 +138,12 @@ class TestLocation(MenuSystemTestCase):
                 '<div style="font-size:0.9em">Destination '
                 'will be on the left</div>'
             ),
-            'Turn right to stay on Kent St. Destination will be on the left.'
+            'Turn right to stay on Kent St . Destination will be on the left .'
         )
 
         self.assertEqual(
             parse_instruction('Move <b>forward</b> Station'),
-            'Move forward Station.'
+            'Move forward Station .'
         )
 
     def test_easter_egg(self):
