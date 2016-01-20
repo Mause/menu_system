@@ -73,6 +73,19 @@ class Pause:
         return Pause.NODE(length=str(self.length))
 
 
+class Play:
+    NODE = E.Play
+
+    def __init__(self, url=None, digits=None, loop=0):
+        assert url or digits
+        self.url = url
+        self.digits = digits
+        self.loop = loop
+
+    def toxml(self):
+        return Play.NODE(url=self.url, digits=self.digits, loop=self.loop)
+
+
 class Hangup:
     NODE = E.Hangup
 
@@ -88,7 +101,8 @@ class Response(Container):
             'gather': Gather,
             'say': Say,
             'pause': Pause,
-            'hangup': Hangup
+            'hangup': Hangup,
+            'play': Play
         }
         self.globals = {'language': 'en-AU'}
         super().__init__()
@@ -97,6 +111,12 @@ class Response(Container):
         return self.add(self._classes['say'](
             self,
             text=text, language=language
+        ))
+
+    def play(self, audio):
+        return self.add(self._classes['play'](
+            self,
+            audio=audio
         ))
 
     def pause(self, length):
