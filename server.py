@@ -14,9 +14,7 @@ from twiml import Response
 from auth import AUTH, ON_HEROKU
 from payphones import PayPhones
 
-logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
-
 
 client = TwilioRestClient(
     AUTH['TWILIO_ACCOUNT_SID'], AUTH['TWILIO_AUTH_TOKEN']
@@ -114,6 +112,9 @@ def parse_instruction(instruction):
 
     instruction = ''.join(instruction.itertext()).strip()
     instruction = ' '.join(instruction.split())
+
+    # replace short versions of address parts with their full versions
+    # ie, Stn -> Station
     instruction = REPLACEMENT_RE.sub(_replace_part, instruction)
     logging.info('Instruction: %s', instruction)
     return instruction.strip()
@@ -185,6 +186,8 @@ def index():
     return 'Sod off'
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+
     app.debug = not ON_HEROKU
     port = int(os.environ['PORT']) if ON_HEROKU else 5555
     app.run(port=port, host='0.0.0.0')
