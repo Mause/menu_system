@@ -113,10 +113,11 @@ class Response(Container):
             text=text, language=language
         ))
 
-    def play(self, audio):
+    def play(self, url=None, digits=None, loop=0):
         return self.add(self._classes['play'](
-            self,
-            audio=audio
+            url=url,
+            digits=digits,
+            loop=loop
         ))
 
     def pause(self, length):
