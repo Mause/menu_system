@@ -146,6 +146,19 @@ class TestLocation(MenuSystemTestCase):
             'Move forward Station.'
         )
 
+    def test_easter_egg(self):
+        self.assertXMLEqual(
+            b'<?xml version="1.0" encoding="UTF-8"?>'
+            b'<Response>'
+            b'<Play>/static/Gorillaz%20-%20Film%20Music%20(Official%20Visual).mp3</Play>'
+            b'<Hangup/>'
+            b'</Response>',
+            self.app.post(
+                '/location/id_recieved',
+                data={'Digits': '12345678'}
+            ).data
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
