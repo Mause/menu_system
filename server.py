@@ -98,7 +98,7 @@ def select_from_payphones(payphones):
         }
     )
 
-    with res.gather(numDigits=1, action=action) as g:
+    with res.gather(numDigits='1', action=action) as g:
         for idx, payphone in enumerate(payphones, 1):
             g.say('Press {} for {}'.format(
                 idx,
