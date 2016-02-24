@@ -121,13 +121,17 @@ def parse_instruction(instruction):
     # mend weird pattern
     instruction = instruction.replace('. .', '.')
 
-    # replace short versions of address parts with their full versions
-    # ie, Stn -> Station
-    instruction = REPLACEMENT_RE.sub(_replace_part, instruction)
+    instruction = mend_short_place_names(instruction)
 
     logging.info('Instruction: %s', instruction)
 
     return instruction.strip()
+
+
+def mend_short_place_names(instruction):
+    # replace short versions of address parts with their full versions
+    # ie, Stn -> Station
+    return REPLACEMENT_RE.sub(_replace_part, instruction)
 
 
 @app.route('/location/payphone_found', methods=['POST'])
@@ -198,6 +202,7 @@ def parse_transit_step(step):
         'minutes',
         text
     )
+    text = mend_short_place_names(text)
     return text
 
 
