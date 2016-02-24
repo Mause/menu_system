@@ -64,20 +64,70 @@ def id_recieved():
             '/static/Gorillaz%20-%20Film%20Music%20(Official%20Visual).mp3'
         ).hangup()
 
-    payphone_id = digits + "X2"
-    logging.info('Looking for payphone with id: "%s"', payphone_id)
-    payphone = payphone_client.by_cabinet_id(payphone_id)
-    if not payphone:
+    payphone_id = digits[:8] + '%' + digits[-1]
+
+    logging.info('Looking for payphone with id like: "%s"', payphone_id)
+    payphones = payphone_client.by_cabinet_id(payphone_id)
+    if not payphones:
         return res.say('Payphone could not be found').hangup()
 
-    properties = payphone[0]['properties']
-    message = 'Payphone found in {}'.format(properties['SSC_NAME'])
-    res.say(message)
-    logging.info(message)
+    if len(payphones) > 1:
+        return select_from_payphones(payphones)
+    else:
+        properties = payphones[0]['properties']
+        message = 'Payphone found in {}'.format(properties['SSC_NAME'])
+        res.say(message)
+        logging.info(message)
+        return do_for_payphone(payphones[0])
+
+
+def select_from_payphones(payphones):
+    res = Response()
+    res.say(
+        '{} payphones were found. Please select your current suburb'
+        .format(len(payphones))
+    )
 
     action = params_and_url_for(
+        'select_payphone_suburb',
+        {
+            'phones': [
+                format_lat_lon(payphone['properties'])
+                for payphone in payphones
+            ]
+        }
+    )
+
+    with res.gather(numDigits=1, action=action) as g:
+        for idx, payphone in enumerate(payphones, 1):
+            g.say('Press {} for {}'.format(
+                idx,
+                payphone['properties']['SSC_NAME']
+            ))
+
+    return res
+
+
+format_lat_lon = '{LATITUDE}, {LONGITUDE}'.format_map
+
+
+@app.route('/select_payphone_suburb', methods=['POST'])
+def select_payphone_suburb():
+
+    idx = int(request.form['Digits'])
+    payphones = request.params['phones']
+    payphone = payphones[idx]
+
+    return do_for_payphone(payphone)
+
+
+def do_for_payphone(payphone):
+    res = Response()
+
+    properties = payphone['properties']
+    action = params_and_url_for(
         'payphone_found',
-        {'latlon': '{LATITUDE}, {LONGITUDE}'.format_map(properties)}
+        {'latlon': format_lat_lon(properties)}
     )
 
     with res.gather(numDigits='1', action=action) as g:
