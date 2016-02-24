@@ -59,12 +59,12 @@ def id_recieved():
     if not re.match(r'\d{%d}' % ID_NUM_DIGITS, digits):
         return res.say('Invalid eye d number').hangup()
 
-    if digits == '12345678':
+    if digits == ''.join(map(str, range(1, ID_NUM_DIGITS+1))):
         return res.play(
             '/static/Gorillaz%20-%20Film%20Music%20(Official%20Visual).mp3'
         ).hangup()
 
-    payphone_id = digits[:8] + '%' + digits[-1]
+    payphone_id = digits[:ID_NUM_DIGITS - 1] + '%' + digits[-1]
 
     logging.info('Looking for payphone with id like: "%s"', payphone_id)
     payphones = payphone_client.by_cabinet_id(payphone_id)
@@ -262,7 +262,8 @@ def parse_transit_step(step):
 @twiml
 def location():
     res = Response()
-    with res.gather(numDigits='8', action=url_for('id_recieved')) as g:
+    with res.gather(numDigits=str(ID_NUM_DIGITS),
+                    action=url_for('id_recieved')) as g:
         g.say(
             'Please enter the {} digit payphone identification number'
             .format(humanize.apnumber(ID_NUM_DIGITS)),
