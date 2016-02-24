@@ -223,6 +223,8 @@ def payphone_found():
         mode=mode,
         departure_time=departure_time
     )
+    if not directions_result:
+        return res.say('No routes could be found').hangup()
 
     directions_result = directions_result[0]
 
