@@ -203,6 +203,7 @@ def parse_transit_step(step):
         text
     )
     text = mend_short_place_names(text)
+    logging.info('Transit instruction: %s', text)
     return text
 
 
