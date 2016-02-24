@@ -114,14 +114,18 @@ format_lat_lon = '{LATITUDE}, {LONGITUDE}'.format_map
 
 @app.route('/select_payphone_suburb', methods=['POST'])
 def select_payphone_suburb():
+    res = Response()
 
     idx = int(request.form['Digits'])
     payphones = json.loads(request.args['phones'])
-    payphone = payphones[idx]
+
+    try:
+        payphone = payphones[idx - 1]  # we 1 index for useability
+    except IndexError:
+        return res.say('Invalid suburb selection').hangup()
 
     logging.info('Selected payphone at latlon %s', payphone)
 
-    res = Response()
 
     res.say('Selected payphone')
 
