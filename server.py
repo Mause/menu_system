@@ -115,7 +115,7 @@ format_lat_lon = '{LATITUDE}, {LONGITUDE}'.format_map
 def select_payphone_suburb():
 
     idx = int(request.form['Digits'])
-    payphones = request.params['phones']
+    payphones = request.args['phones']
     payphone = payphones[idx]
 
 
