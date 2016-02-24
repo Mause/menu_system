@@ -56,7 +56,7 @@ def id_recieved():
     logging.info('Digits: "%s"', digits)
 
     if not re.match(r'\d{8}', digits):
-        return res.say('Invalid id number').hangup()
+        return res.say('Invalid eye d number').hangup()
 
     if digits == '12345678':
         return res.play(
