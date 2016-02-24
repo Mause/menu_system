@@ -1,5 +1,6 @@
 import re
 import os
+import json
 import logging
 from functools import wraps
 from datetime import datetime
@@ -91,10 +92,10 @@ def select_from_payphones(payphones):
     action = params_and_url_for(
         'select_payphone_suburb',
         {
-            'phones': [
+            'phones': json.dumps([
                 format_lat_lon(payphone['properties'])
                 for payphone in payphones
-            ]
+            ])
         }
     )
 
@@ -115,7 +116,7 @@ format_lat_lon = '{LATITUDE}, {LONGITUDE}'.format_map
 def select_payphone_suburb():
 
     idx = int(request.form['Digits'])
-    payphones = request.args['phones']
+    payphones = json.loads(request.args['phones'])
     payphone = payphones[idx]
 
     logging.info('Selected payphone at latlon %s', payphone)
