@@ -78,7 +78,7 @@ def id_recieved():
         message = 'Payphone found in {}'.format(properties['SSC_NAME'])
         res.say(message)
         logging.info(message)
-        return do_for_payphone(payphones[0])
+        return do_for_payphone(res, payphones[0])
 
 
 def select_from_payphones(payphones):
@@ -118,11 +118,15 @@ def select_payphone_suburb():
     payphones = request.params['phones']
     payphone = payphones[idx]
 
-    return do_for_payphone(payphone)
 
-
-def do_for_payphone(payphone):
     res = Response()
+
+    res.say('Selected payphone')
+
+    return do_for_payphone(res, payphone)
+
+
+def do_for_payphone(res, payphone):
 
     properties = payphone['properties']
     action = params_and_url_for(
