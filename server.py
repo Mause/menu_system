@@ -164,7 +164,10 @@ def payphone_found():
 
     for leg in directions_result['legs']:
         for step in leg['steps']:
-            instruction = parse_instruction(step['html_instructions'])
+            if step['travel_mode'] == 'TRANSIT':
+                instruction = parse_transit_step(step)
+            else:
+                instruction = parse_instruction(step['html_instructions'])
 
             res.say(instruction)
             res.pause(length=0.5)
@@ -172,6 +175,30 @@ def payphone_found():
     res.say("End of instructions")
 
     return res
+
+
+TEMPLATE = (
+    'Take the {route_name} from stop "{departure_stop}", towards "{towards}" '
+    'at {departure_time}, and disembark at "{arrival_stop}" after {duration}'
+)
+
+
+def parse_transit_step(step):
+    transit_details = step['transit_details']
+    text = TEMPLATE.format(
+        route_name=transit_details['line']['short_name'],
+        departure_stop=transit_details['departure_stop']['name'],
+        towards=transit_details['headsign'],
+        departure_time=transit_details['departure_time']['text'],
+        arrival_stop=transit_details['arrival_stop']['name'],
+        duration=step['duration']['text']
+    )
+    text = re.sub(
+        r'\w?mins\w?',
+        'minutes',
+        text
+    )
+    return text
 
 
 @app.route('/location', methods=['POST'])
