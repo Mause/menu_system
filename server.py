@@ -84,11 +84,6 @@ def id_recieved():
 
 def select_from_payphones(payphones):
     res = Response()
-    res.say(
-        '{} payphones were found. Please select your current suburb'
-        .format(len(payphones))
-    )
-
     action = params_and_url_for(
         'select_payphone_suburb',
         {
@@ -100,6 +95,12 @@ def select_from_payphones(payphones):
     )
 
     with res.gather(numDigits='1', action=action) as g:
+        g.say(
+            '{} payphones were found. Please select your current suburb'
+            'from the following'
+            .format(len(payphones))
+        )
+
         for idx, payphone in enumerate(payphones, 1):
             g.say('Press {} for {}'.format(
                 idx,
