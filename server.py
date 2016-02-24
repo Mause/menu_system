@@ -114,6 +114,7 @@ format_lat_lon = '{LATITUDE}, {LONGITUDE}'.format_map
 
 
 @app.route('/select_payphone_suburb', methods=['POST'])
+@twiml
 def select_payphone_suburb():
     res = Response()
 
