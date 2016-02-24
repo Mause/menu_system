@@ -9,6 +9,7 @@ import googlemaps
 from flask import url_for, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
+import humanize
 
 from twiml import Response
 from auth import AUTH, ON_HEROKU
@@ -22,7 +23,7 @@ client = TwilioRestClient(
 payphone_client = PayPhones()
 gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
-
+ID_NUM_DIGITS = 9
 ADDRESSTO = os.environ.get('ADDRESSTO', '6c Farnham Street, Bentley')
 FULL_STOP = ' . '
 REPLACEMENTS = {
@@ -55,7 +56,7 @@ def id_recieved():
     digits = request.form['Digits']
     logging.info('Digits: "%s"', digits)
 
-    if not re.match(r'\d{8}', digits):
+    if not re.match(r'\d{%d}' % ID_NUM_DIGITS, digits):
         return res.say('Invalid eye d number').hangup()
 
     if digits == '12345678':
@@ -213,7 +214,8 @@ def location():
     res = Response()
     with res.gather(numDigits='8', action=url_for('id_recieved')) as g:
         g.say(
-            'Please enter the eight digit payphone identification number',
+            'Please enter the {} digit payphone identification number'
+            .format(humanize.apnumber(ID_NUM_DIGITS)),
             language='en-AU'
         )
     return res
