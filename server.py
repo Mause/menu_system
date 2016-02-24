@@ -118,6 +118,7 @@ def select_payphone_suburb():
     payphones = request.args['phones']
     payphone = payphones[idx]
 
+    logging.info('Selected payphone at latlon %s', payphone)
 
     res = Response()
 
