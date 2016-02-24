@@ -79,7 +79,7 @@ def id_recieved():
         message = 'Payphone found in {}'.format(properties['SSC_NAME'])
         res.say(message)
         logging.info(message)
-        return do_for_payphone(res, payphones[0])
+        return do_for_payphone(res, format_lat_lon(payphones[0]['properties']))
 
 
 def select_from_payphones(payphones):
@@ -126,18 +126,15 @@ def select_payphone_suburb():
 
     logging.info('Selected payphone at latlon %s', payphone)
 
-
     res.say('Selected payphone')
 
     return do_for_payphone(res, payphone)
 
 
-def do_for_payphone(res, payphone):
-
-    properties = payphone['properties']
+def do_for_payphone(res, latlon):
     action = params_and_url_for(
         'payphone_found',
-        {'latlon': format_lat_lon(properties)}
+        {'latlon': latlon}
     )
 
     with res.gather(numDigits='1', action=action) as g:
