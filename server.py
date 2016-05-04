@@ -18,6 +18,8 @@ from payphones import PayPhones
 
 app = Flask(__name__)
 
+logging.basicConfig(level=logging.DEBUG)
+
 client = TwilioRestClient(
     AUTH['TWILIO_ACCOUNT_SID'], AUTH['TWILIO_AUTH_TOKEN']
 )
