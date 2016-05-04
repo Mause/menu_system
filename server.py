@@ -76,7 +76,7 @@ def id_recieved():
         return select_from_payphones(payphones)
     else:
         properties = payphones[0]['properties']
-        message = 'Payphone found in {}'.format(properties['SSC_NAME'])
+        message = 'Payphone found in {}'.format(properties['SSC_Name'])
         res.say(message)
         logging.info(message)
         return do_for_payphone(res, format_lat_lon(payphones[0]['properties']))
@@ -110,7 +110,7 @@ def select_from_payphones(payphones):
     return res
 
 
-format_lat_lon = '{LATITUDE}, {LONGITUDE}'.format_map
+format_lat_lon = '{Latitude}, {Longitude}'.format_map
 
 
 @app.route('/select_payphone_suburb', methods=['POST'])
