@@ -5,7 +5,7 @@ from functools import lru_cache
 
 
 class ProxyAdapter(requests.adapters.HTTPAdapter):
-    PROXY = 'http://services.mapinfo.com.au/riaproxy?url='
+    PROXY = 'http://services.mapinfo.com.au/localriaproxy?url='
 
     def send(self, prequest, **kwargs):
         prequest.url = ProxyAdapter.PROXY + quote_plus(prequest.url)
@@ -76,6 +76,7 @@ class FeatureService:
     def __init__(self, base):
         self.sess = requests.Session()
         self.sess.mount('https://', ProxyAdapter())
+        self.sess.mount('http://', ProxyAdapter())
         self.base = base
 
     @lru_cache()
@@ -121,9 +122,9 @@ class FeatureService:
 
 class PayPhones:
     def __init__(self):
+        # NOTE: not actually localhost, as it goes through a proxy
         self.fs = FeatureService(
-            'https://spatialserver.pbondemand.com.au/'
-            'FeatureService/services/rest'
+            'http://localhost:8080/rest/Spatial/FeatureService'
         )
 
     def by_latlon(self, latlon):
@@ -151,7 +152,7 @@ class PayPhones:
     def by_cabinet_id(self, cabinet_id):
         return self.fs.features_by_sql(
             'select * '
-            'from "/telstrappol/NamedTables/TLS_all_payphones" '
+            'from "/telstrappol/NamedTables/TLS_All_Payphones" '
             'where CABINET_ID '
             'like (\'{}\')'
             .format(cabinet_id)
