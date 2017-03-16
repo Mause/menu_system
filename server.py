@@ -258,6 +258,16 @@ def payphone_found():
     return res
 
 
+@app.errorhandler(500)
+@twiml
+def error_500():
+    return (
+        Response()
+        .say("I'm sorry, something seems to have gone wrong. Goodbye")
+        .hangup()
+    )
+
+
 @app.route('/possibly_repeat')
 @twiml
 def possibly_repeat():
