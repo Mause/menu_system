@@ -55,8 +55,11 @@ def params_and_url_for(endpoint, params):
 @app.route('/location/id_recieved', methods=['POST'])
 @twiml
 def id_recieved():
+    return id_recieved_response(request.form['Digits'])
+
+
+def id_recieved_response(digits):
     res = Response()
-    digits = request.form['Digits']
     logging.info('Digits: "%s"', digits)
 
     if not re.match(r'\d{%d}' % ID_NUM_DIGITS, digits):
@@ -118,10 +121,14 @@ format_lat_lon = '{Latitude}, {Longitude}'.format_map
 @app.route('/select_payphone_suburb', methods=['POST'])
 @twiml
 def select_payphone_suburb():
-    res = Response()
+    return select_payphone_suburb_response(
+        int(request.form['Digits']),
+        json.loads(request.args['phones'])
+    )
 
-    idx = int(request.form['Digits'])
-    payphones = json.loads(request.args['phones'])
+
+def select_payphone_suburb_response(idx, payphones):
+    res = Response()
 
     try:
         payphone = payphones[idx - 1]  # we 1 index for useability
@@ -249,7 +256,7 @@ def payphone_found_response(digits, from_):
     action = params_and_url_for(
         'possibly_repeat',
         {
-            'latlon': request.args['latlon'],
+            'latlon': from_,
             'Digits': digits
         }
     )
