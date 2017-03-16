@@ -128,6 +128,7 @@ class TestLocation(MenuSystemTestCase):
             b'</Response>',
             self.app.post(
                 '/location/payphone_found',
+                query_string={'latlon': '123, 123'},
                 data={'Digits': '0'}
             ).data
         )
