@@ -47,9 +47,9 @@ class TestLocation(MenuSystemTestCase):
             (
                 b'<?xml version="1.0" encoding="UTF-8"?>'
                 b'<Response>'
-                b'<Gather action="/location/id_recieved" numDigits="8">'
+                b'<Gather action="/location/id_recieved" numDigits="9">'
                 b'<Say language="en-AU">'
-                b'Please enter the eight digit payphone identification number'
+                b'Please enter the nine digit payphone identification number'
                 b'</Say>'
                 b'</Gather>'
                 b'</Response>'
@@ -76,7 +76,7 @@ class TestLocation(MenuSystemTestCase):
             b'</Response>',
             self.app.post(
                 '/location/id_recieved',
-                data={'Digits': '08948508'}
+                data={'Digits': '089458082'}
             ).data
         )
 
@@ -93,7 +93,7 @@ class TestLocation(MenuSystemTestCase):
             b'</Response>',
             self.app.post(
                 '/location/id_recieved',
-                data={'Digits': '08948508'}
+                data={'Digits': '089485082'}
             ).data
         )
 
@@ -155,7 +155,7 @@ class TestLocation(MenuSystemTestCase):
             b'</Response>',
             self.app.post(
                 '/location/id_recieved',
-                data={'Digits': '12345678'}
+                data={'Digits': '123456789'}
             ).data
         )
 
