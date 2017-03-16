@@ -199,15 +199,19 @@ def mend_short_place_names(instruction):
 @app.route('/location/payphone_found', methods=['POST'])
 @twiml
 def payphone_found():
-    res = Response()
+    return payphone_found_response(
+        request.values['Digits'],
+        request.args['latlon']
+    )
 
-    digits = request.values['Digits']
+
+def payphone_found_response(digits, from_):
+    res = Response()
     if digits not in {'1', '2'}:
         return res.say('Invalid input').hangup()
 
     mode = {'1': 'walking', '2': 'transit'}[digits]
 
-    from_ = request.args['latlon']
     to = ADDRESSTO
     departure_time = datetime.now()
 
@@ -274,10 +278,10 @@ def possibly_repeat():
     digits = request.form['Digits']
 
     if digits == '1':
-        return redirect(params_and_url_for(
-            'payphone_found',
-            request.args
-        ))
+        return payphone_found_response(
+            request.args['Digits'],
+            request.args['latlon']
+        )
 
     return Response().say('Okay, goodbye').hangup()
 
