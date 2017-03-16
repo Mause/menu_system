@@ -7,7 +7,7 @@ from datetime import datetime
 from urllib.parse import urlencode
 
 import googlemaps
-from flask import url_for, Flask, request, Response as FlaskResponse
+from flask import url_for, redirect, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 import humanize
@@ -242,7 +242,34 @@ def payphone_found():
 
     res.say("End of instructions")
 
+    action = params_and_url_for(
+        '/possibly_repeat',
+        {
+            'latlon': request.args['latlon'],
+            'Digits': digits
+        }
+    )
+    with res.gather(numDigits=1, action=action):
+        res.say(
+            'Enter 1 to repeat instructions, or hang up',
+            language='en-AU'
+        )
+
     return res
+
+
+@app.route('/possibly_repeat')
+@twiml
+def possibly_repeat():
+    digits = request.form['Digits']
+
+    if digits == 1:
+        return redirect(params_and_url_for(
+            '/location/payphone_found',
+            request.args
+        ))
+
+    return Response().hangup()
 
 
 TEMPLATE = (
