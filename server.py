@@ -242,7 +242,7 @@ def payphone_found_response(digits, from_):
                 instruction = parse_instruction(step['html_instructions'])
 
             res.say(instruction)
-            res.pause(length=0.5)
+            res.pause(length=1)
 
     res.say("End of instructions")
 
