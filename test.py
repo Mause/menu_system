@@ -111,6 +111,13 @@ class TestLocation(MenuSystemTestCase):
             b'<Say language="en-AU">Move forward Station.</Say>'
             b'<Pause length="1" />'
             b'<Say language="en-AU">End of instructions</Say>'
+            b'<Gather '
+                b'action="/possibly_repeat?latlon=123%2C+321&amp;Digits=1" '
+                b'numDigits="1">'
+                    b'<Say language="en-AU">'
+                        b'Enter 1 to repeat instructions, or hang up.'
+                    b'</Say>'
+            b'</Gather>'
             b'</Response>',
             self.app.post(
                 '/location/payphone_found',
