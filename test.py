@@ -19,9 +19,9 @@ class MenuSystemTestCase(unittest.TestCase):
 
 
 PAYPHONE_RESPONSE = [{'properties': {
-    'SSC_NAME': 'Wilton',
-    'LATITUDE': 123,
-    'LONGITUDE': 321
+    'SSC_Name': 'Wilton',
+    'Latitude': 123,
+    'Longitude': 321
 }}]
 
 
