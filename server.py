@@ -249,8 +249,8 @@ def payphone_found():
             'Digits': digits
         }
     )
-    with res.gather(numDigits='1', action=action):
-        res.say(
+    with res.gather(numDigits='1', action=action) as gat:
+        gat.say(
             'Enter 1 to repeat instructions, or hang up',
             language='en-AU'
         )
