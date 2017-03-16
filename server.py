@@ -249,7 +249,7 @@ def payphone_found():
             'Digits': digits
         }
     )
-    with res.gather(numDigits=1, action=action):
+    with res.gather(numDigits='1', action=action):
         res.say(
             'Enter 1 to repeat instructions, or hang up',
             language='en-AU'
