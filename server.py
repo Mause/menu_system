@@ -201,7 +201,7 @@ def mend_short_place_names(instruction):
 def payphone_found():
     res = Response()
 
-    digits = request.form['Digits']
+    digits = request.values['Digits']
     if digits not in {'1', '2'}:
         return res.say('Invalid input').hangup()
 
