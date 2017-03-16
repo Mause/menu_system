@@ -273,13 +273,13 @@ def error_500():
 def possibly_repeat():
     digits = request.form['Digits']
 
-    if digits == 1:
+    if digits == '1':
         return redirect(params_and_url_for(
             'payphone_found',
             request.args
         ))
 
-    return Response().hangup()
+    return Response().say('Okay, goodbye').hangup()
 
 
 TEMPLATE = (
