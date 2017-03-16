@@ -268,7 +268,7 @@ def error_500():
     )
 
 
-@app.route('/possibly_repeat')
+@app.route('/possibly_repeat', methods=['POST'])
 @twiml
 def possibly_repeat():
     digits = request.form['Digits']
