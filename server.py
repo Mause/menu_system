@@ -243,7 +243,7 @@ def payphone_found():
     res.say("End of instructions")
 
     action = params_and_url_for(
-        '/possibly_repeat',
+        'possibly_repeat',
         {
             'latlon': request.args['latlon'],
             'Digits': digits
@@ -265,7 +265,7 @@ def possibly_repeat():
 
     if digits == 1:
         return redirect(params_and_url_for(
-            '/location/payphone_found',
+            'payphone_found',
             request.args
         ))
 
