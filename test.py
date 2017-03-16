@@ -109,7 +109,7 @@ class TestLocation(MenuSystemTestCase):
             b'<?xml version="1.0" encoding="UTF-8"?>'
             b'<Response>'
             b'<Say language="en-AU">Move forward Station.</Say>'
-            b'<Pause length="0.5" />'
+            b'<Pause length="1" />'
             b'<Say language="en-AU">End of instructions</Say>'
             b'</Response>',
             self.app.post(
