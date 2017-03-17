@@ -38,6 +38,10 @@ REPLACEMENTS = {
 REPLACEMENT_RE = re.compile(
     r'(\W|^)({})(\W|$)'.format('|'.join(REPLACEMENTS))
 )
+TRANSIT_STEP_TEMPLATE = (
+    'Take the {route_name} from stop "{departure_stop}", towards "{towards}" '
+    'at {departure_time}, and disembark at "{arrival_stop}" after {duration}'
+)
 
 
 def twiml(func):
@@ -291,15 +295,9 @@ def possibly_repeat():
     return Response().say('Okay, goodbye').hangup()
 
 
-TEMPLATE = (
-    'Take the {route_name} from stop "{departure_stop}", towards "{towards}" '
-    'at {departure_time}, and disembark at "{arrival_stop}" after {duration}'
-)
-
-
 def parse_transit_step(step):
     transit_details = step['transit_details']
-    text = TEMPLATE.format(
+    text = TRANSIT_STEP_TEMPLATE.format(
         route_name=transit_details['line']['short_name'],
         departure_stop=transit_details['departure_stop']['name'],
         towards=transit_details['headsign'],
