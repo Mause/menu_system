@@ -203,7 +203,7 @@ def only_from_twilio(func):
 
 
 @app.route('/speech', methods=['GET', 'POST'])
-@only_from_twilio
+# @only_from_twilio
 def speech():
     mimetype = 'audio/wav'
 
