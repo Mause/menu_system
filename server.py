@@ -9,7 +9,6 @@ from urllib.parse import urlencode
 import googlemaps
 from flask import url_for, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
-from twilio.rest import TwilioRestClient
 import humanize
 
 from twiml import Response
@@ -20,9 +19,6 @@ app = Flask(__name__)
 
 logging.basicConfig(level=logging.DEBUG)
 
-client = TwilioRestClient(
-    AUTH['TWILIO_ACCOUNT_SID'], AUTH['TWILIO_AUTH_TOKEN']
-)
 payphone_client = PayPhones()
 gmaps = googlemaps.Client(key=AUTH['GOOGLE_MAPS_DIRECTIONS'])
 
