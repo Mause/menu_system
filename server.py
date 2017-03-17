@@ -99,7 +99,7 @@ def select_from_payphones(payphones):
         }
     )
 
-    with res.gather(numDigits='1', action=action) as g:
+    with res.gather(numDigits=1, action=action) as g:
         g.say(
             '{} payphones were found. Please select your current suburb'
             'from the following'
@@ -148,7 +148,7 @@ def do_for_payphone(res, latlon):
         {'latlon': latlon}
     )
 
-    with res.gather(numDigits='1', action=action) as g:
+    with res.gather(numDigits=1, action=action) as g:
         g.say(
             'Please enter, 1 for walking instructions, or 2 for public '
             'transportation instructions'
@@ -259,7 +259,7 @@ def payphone_found_response(digits, from_):
             'Digits': digits
         }
     )
-    with res.gather(numDigits='1', action=action) as gat:
+    with res.gather(numDigits=1, action=action) as gat:
         gat.say(
             'Enter 1 to repeat instructions, or hang up.',
         )
@@ -321,7 +321,7 @@ def parse_transit_step(step):
 @twiml
 def location():
     res = Response()
-    with res.gather(numDigits=str(ID_NUM_DIGITS),
+    with res.gather(numDigits=ID_NUM_DIGITS,
                     action=url_for('id_recieved')) as g:
         g.say(
             'Please enter the {} digit payphone identification number'

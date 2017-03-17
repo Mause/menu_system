@@ -143,7 +143,9 @@ class Response(Container):
 
     def gather(self, numDigits=None, action=None):
         res = self._classes['gather'](
-            self, numDigits=numDigits, action=action
+            self,
+            numDigits=str(numDigits) if numDigits else None,
+            action=action
         )
         self.add(res)
         return res
