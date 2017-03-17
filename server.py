@@ -184,12 +184,14 @@ def only_from_twilio(func):
                 sorted(incoming.items())
             )
         )
+        logging.info('Raw: %s', calced)
         calced = hmac.new(
             AUTH['TWILIO_AUTH_TOKEN'].encode(),
             calced.encode(),
             sha1
         )
         calced = b64encode(calced.digest())
+        logging.info('Calced: %s', calced)
 
         if calced != request.headers['X-Twilio-Signature']:
             return 'Bad signature', 403
