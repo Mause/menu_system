@@ -170,22 +170,25 @@ def _replace_part(match):
     )
 
 
+def checksum(url, incoming, auth_token):
+    calced = url + ''.join(map(''.join, sorted(incoming.items())))
+    logging.info('Raw: %s', calced)
+    calced = hmac.new(
+        auth_token.encode(),
+        calced.encode(),
+        sha1
+    )
+    return b64encode(calced.digest()).decode()
+
+
 def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        calced = request.url + ''.join(
-            map(
-                ''.join,
-                sorted(request.form.items())
-            )
+        calced = checksum(
+            request.url,
+            request.form,
+            AUTH['TWILIO_AUTH_TOKEN']
         )
-        logging.info('Raw: %s', calced)
-        calced = hmac.new(
-            AUTH['TWILIO_AUTH_TOKEN'].encode(),
-            calced.encode(),
-            sha1
-        )
-        calced = b64encode(calced.digest()).decode()
         logging.info('Calced: %s', calced)
         logging.info('Proved: %s', request.headers['X-Twilio-Signature'])
 
