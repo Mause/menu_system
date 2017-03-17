@@ -173,10 +173,15 @@ def _replace_part(match):
 def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        if request.method == 'POST':
+            incoming = request.form
+        else:
+            incoming = request.args
+
         calced = request.url + ''.join(
             map(
                 ''.join,
-                sorted(request.form.items())
+                sorted(incoming.items())
             )
         )
         calced = hmac.new(
