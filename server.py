@@ -184,6 +184,8 @@ def checksum(url, incoming, auth_token):
 def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        logging.info(request.form)
+        logging.info(request.args)
         calced = checksum(
             request.url,
             request.form,
