@@ -1,9 +1,12 @@
 import re
 import os
+import hmac
 import json
 import logging
 import requests
+from hashlib import sha1
 from functools import wraps
+from base64 import b64encode
 from datetime import datetime
 from urllib.parse import urlencode
 
@@ -167,7 +170,32 @@ def _replace_part(match):
     )
 
 
-@app.route('/speech')
+def only_from_twilio(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        calced = request.url + ''.join(
+            map(
+                ''.join,
+                sorted(request.form.items())
+            )
+        )
+        calced = hmac.new(
+            AUTH['TWILIO_AUTH_TOKEN'].encode(),
+            calced.encode(),
+            sha1
+        )
+        calced = b64encode(calced.digest())
+
+        if calced != request.headers['X-Twilio-Signature']:
+            return 'Bad signature', 403
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+@app.route('/speech', methods=['GET', 'POST'])
+@only_from_twilio
 def speech():
     mimetype = 'audio/wav'
 
