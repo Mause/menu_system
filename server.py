@@ -185,7 +185,6 @@ def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         logging.info(request.args)
-        request.input_stream.seek(0)
         logging.info(request.input_stream.read())
         calced = checksum(
             request.url,
