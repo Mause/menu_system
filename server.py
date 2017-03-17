@@ -84,7 +84,7 @@ def id_recieved_response(digits):
         message = 'Payphone found in {}'.format(properties['SSC_Name'])
         res.say(message)
         logging.info(message)
-        return do_for_payphone(res, format_lat_lon(payphones[0]['properties']))
+        return do_for_payphone(res, format_lat_lon(properties))
 
 
 def select_from_payphones(payphones):
