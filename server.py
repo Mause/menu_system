@@ -173,16 +173,10 @@ def _replace_part(match):
 def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if request.method == 'POST':
-            incoming = request.form
-        else:
-            incoming = dict(request.args)
-            incoming.pop('text')
-
         calced = request.url + ''.join(
             map(
                 ''.join,
-                sorted(incoming.items())
+                sorted(request.form.items())
             )
         )
         logging.info('Raw: %s', calced)
