@@ -7,7 +7,7 @@ from datetime import datetime
 from urllib.parse import urlencode
 
 import googlemaps
-from flask import url_for, redirect, Flask, request, Response as FlaskResponse
+from flask import url_for, Flask, request, Response as FlaskResponse
 from lxml.html import fromstring
 from twilio.rest import TwilioRestClient
 import humanize
