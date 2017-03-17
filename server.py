@@ -190,7 +190,7 @@ def only_from_twilio(func):
             calced.encode(),
             sha1
         )
-        calced = b64encode(calced.digest())
+        calced = b64encode(calced.digest()).decode()
         logging.info('Calced: %s', calced)
 
         if calced != request.headers['X-Twilio-Signature']:
