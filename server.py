@@ -269,8 +269,9 @@ def payphone_found_response(digits, from_):
 
 
 @app.errorhandler(500)
+@app.errorhandler(400)
 @twiml
-def error_500():
+def error(exc=None):
     return (
         Response()
         .say("I'm sorry, something seems to have gone wrong. Goodbye")
