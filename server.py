@@ -176,7 +176,8 @@ def only_from_twilio(func):
         if request.method == 'POST':
             incoming = request.form
         else:
-            incoming = request.args
+            incoming = dict(request.args)
+            incoming.pop('text')
 
         calced = request.url + ''.join(
             map(
