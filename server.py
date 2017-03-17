@@ -193,6 +193,7 @@ def only_from_twilio(func):
         )
         calced = b64encode(calced.digest()).decode()
         logging.info('Calced: %s', calced)
+        logging.info('Proved: %s', request.headers['X-Twilio-Signature'])
 
         if calced != request.headers['X-Twilio-Signature']:
             return 'Bad signature', 403
