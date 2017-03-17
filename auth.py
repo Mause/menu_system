@@ -5,7 +5,11 @@ try:
     ON_HEROKU = False
 except FileNotFoundError:
     keys = [
-        'GOOGLE_MAPS_DIRECTIONS', 'TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN'
+        'GOOGLE_MAPS_DIRECTIONS',
+        'TWILIO_ACCOUNT_SID',
+        'TWILIO_AUTH_TOKEN',
+        'SPEECH_USERNAME',
+        'SPEECH_PASSWORD'
     ]
     AUTH = {key: os.environ[key] for key in keys}
     ON_HEROKU = True

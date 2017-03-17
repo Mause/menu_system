@@ -2,6 +2,7 @@ import re
 import os
 import json
 import logging
+import requests
 from functools import wraps
 from datetime import datetime
 from urllib.parse import urlencode
@@ -164,6 +165,24 @@ def _replace_part(match):
         REPLACEMENTS[match.group(2)],
         match.group(3)
     )
+
+
+@app.route('/speech')
+def speech():
+    mimetype = 'audio/wav'
+
+    res = requests.get(
+        'https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize',
+        params={
+            'text': request.values['text'],
+            'accept': mimetype,
+            'voice': 'en-US_AllisonVoice'
+        },
+        auth=(AUTH['SPEECH_USERNAME'], AUTH['SPEECH_PASSWORD']),
+        stream=True
+    )
+
+    return FlaskResponse(res.raw, mimetype=mimetype)
 
 
 def parse_instruction(instruction):

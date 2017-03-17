@@ -95,6 +95,14 @@ class Play:
         )
 
 
+class WatsonSay(Play):
+    def __init__(self, _root, text, **kwargs):
+        from server import params_and_url_for
+        super().__init__(
+            url=params_and_url_for('speech', {'text': text})
+        )
+
+
 class Hangup:
     NODE = E.Hangup
 
@@ -108,7 +116,7 @@ class Response(Container):
     def __init__(self):
         self._classes = {
             'gather': Gather,
-            'say': Say,
+            'say': WatsonSay,
             'pause': Pause,
             'hangup': Hangup,
             'play': Play
