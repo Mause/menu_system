@@ -74,7 +74,8 @@ def id_recieved_response(digits):
             '/static/Gorillaz%20-%20Film%20Music%20(Official%20Visual).mp3'
         ).hangup()
 
-    payphone_id = digits[:ID_NUM_DIGITS - 1] + '%' + digits[-1]
+    # insert a wildcard where the punctuation is in the phone id
+    payphone_id = digits[:-1] + '%' + digits[-1]
 
     logging.info('Looking for payphone with id like: "%s"', payphone_id)
     payphones = payphone_client.by_cabinet_id(payphone_id)
