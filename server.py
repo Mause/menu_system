@@ -151,8 +151,7 @@ def do_for_payphone(res, latlon):
     with res.gather(numDigits='1', action=action) as g:
         g.say(
             'Please enter, 1 for walking instructions, or 2 for public '
-            'transportation instructions',
-            language='en-AU'
+            'transportation instructions'
         )
 
     return res
@@ -262,8 +261,7 @@ def payphone_found_response(digits, from_):
     )
     with res.gather(numDigits='1', action=action) as gat:
         gat.say(
-            'Enter 1 to repeat instructions, or hang up',
-            language='en-AU'
+            'Enter 1 to repeat instructions, or hang up.',
         )
 
     return res
@@ -327,8 +325,7 @@ def location():
                     action=url_for('id_recieved')) as g:
         g.say(
             'Please enter the {} digit payphone identification number'
-            .format(humanize.apnumber(ID_NUM_DIGITS)),
-            language='en-AU'
+            .format(humanize.apnumber(ID_NUM_DIGITS))
         )
     return res
 
