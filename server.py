@@ -9,6 +9,7 @@ from functools import wraps
 from base64 import b64encode
 from datetime import datetime
 from urllib.parse import urlencode
+from requests.structures import CaseInsensitiveDict
 
 import googlemaps
 from flask import url_for, Flask, request, Response as FlaskResponse
@@ -79,13 +80,17 @@ def id_recieved_response(digits):
 
     logging.info('Looking for payphone with id like: "%s"', payphone_id)
     payphones = payphone_client.by_cabinet_id(payphone_id)
+    payphones = [
+        CaseInsensitiveDict(payphone['properties'])
+        for payphone in payphones
+    ]
     if not payphones:
         return res.say('Payphone could not be found').hangup()
 
     if len(payphones) > 1:
         return select_from_payphones(payphones)
     else:
-        properties = payphones[0]['properties']
+        properties = CaseInsensitiveDict(payphones[0])
         message = 'Payphone found in {}'.format(properties['SSC_Name'])
         res.say(message)
         logging.info(message)
@@ -98,7 +103,7 @@ def select_from_payphones(payphones):
         'select_payphone_suburb',
         {
             'phones': json.dumps([
-                format_lat_lon(payphone['properties'])
+                format_lat_lon(payphone)
                 for payphone in payphones
             ])
         }
@@ -114,7 +119,7 @@ def select_from_payphones(payphones):
         for idx, payphone in enumerate(payphones, 1):
             g.say('Press {} for {}'.format(
                 idx,
-                payphone['properties']['SSC_NAME']
+                payphone['SSC_NAME']
             ))
 
     return res
