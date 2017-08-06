@@ -171,5 +171,27 @@ class TestLocation(MenuSystemTestCase):
         )
 
 
+class TestValidation(unittest.TestCase):
+    def test_validation(self):
+        from server import checksum
+
+        res = checksum(
+            'https://mycompany.com/myapp.php?foo=1&bar=2',
+            {
+                'CallSid': 'CA1234567890ABCDE',
+                'Caller': '+14158675309',
+                'Digits': '1234',
+                'From': '+14158675309',
+                'To': '+18005551212',
+            },
+            '12345'
+        )
+
+        self.assertEqual(
+            res,
+            'RSOYDt4T1cUTdK1PDd93/VVr8B8='
+        )
+
+
 if __name__ == '__main__':
     unittest.main()

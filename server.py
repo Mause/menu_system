@@ -190,7 +190,6 @@ def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         logging.info(request.args)
-        logging.info(request.input_stream.read())
         calced = checksum(
             request.url,
             request.form,
@@ -208,7 +207,7 @@ def only_from_twilio(func):
 
 
 @app.route('/speech', methods=['GET', 'POST'])
-# @only_from_twilio
+@only_from_twilio
 def speech():
     mimetype = 'audio/wav'
 
