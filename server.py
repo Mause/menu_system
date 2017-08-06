@@ -201,10 +201,11 @@ def only_from_twilio(func):
             request.form,
             AUTH['TWILIO_AUTH_TOKEN']
         )
+        signature = request.headers['X-Twilio-Signature']
         logging.info('Calced: %s', calced)
-        logging.info('Proved: %s', request.headers['X-Twilio-Signature'])
+        logging.info('Proved: %s', signature)
 
-        if calced != request.headers['X-Twilio-Signature']:
+        if calced != signature:
             return 'Bad signature', 403
 
         return func(*args, **kwargs)
