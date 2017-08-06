@@ -190,8 +190,10 @@ def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         logging.info(request.args)
+        url = request.url.replace('http:', 'https:')
+        logging.info(url)
         calced = checksum(
-            request.url,
+            url,
             request.form,
             AUTH['TWILIO_AUTH_TOKEN']
         )
