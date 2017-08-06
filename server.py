@@ -192,6 +192,7 @@ def only_from_twilio(func):
         logging.info(request.args)
         url = request.url.replace('http:', 'https:')
         logging.info(url)
+        logging.info(dict(request.headers))
         calced = checksum(
             url,
             request.form,
