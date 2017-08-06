@@ -190,9 +190,12 @@ def only_from_twilio(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         logging.info(request.args)
-        url = request.url.replace('http:', 'https:')
-        logging.info(url)
-        logging.info(dict(request.headers))
+
+        url = request.url
+        # handle cloudflare ssl proxying
+        if "Cf-Ray" in request.headers:
+            url = url.replace('http:', 'https:')
+
         calced = checksum(
             url,
             request.form,
