@@ -2,8 +2,12 @@ import os
 import server
 import unittest
 from unittest.mock import patch
+from server import checksum
 import tempfile
 import logging
+from lxml.etree import fromstring, tostring
+from formencode.doctest_xml_compare import xml_compare
+
 logging.basicConfig(level=logging.WARN)
 
 
@@ -29,9 +33,6 @@ class TestLocation(MenuSystemTestCase):
     maxDiff = None
 
     def assertXMLEqual(self, first, second):
-        from lxml.etree import fromstring, tostring
-        from formencode.doctest_xml_compare import xml_compare
-        # __import__('ipdb').set_trace()
         first = fromstring(first)
         second = fromstring(second)
         try:
@@ -173,8 +174,6 @@ class TestLocation(MenuSystemTestCase):
 
 class TestValidation(unittest.TestCase):
     def test_validation(self):
-        from server import checksum
-
         res = checksum(
             'https://mycompany.com/myapp.php?foo=1&bar=2',
             {
