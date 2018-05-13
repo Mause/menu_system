@@ -116,7 +116,8 @@ class Response(Container):
     def __init__(self):
         self._classes = {
             'gather': Gather,
-            'say': WatsonSay,
+            # 'say': WatsonSay,
+            'say': Say,
             'pause': Pause,
             'hangup': Hangup,
             'play': Play
